@@ -18,3 +18,11 @@ const chiudi = () => { menu.hidden = true; burger.setAttribute('aria-expanded', 
 burger.onclick = e => { e.stopPropagation(); const apri = menu.hidden; menu.hidden = !apri; burger.setAttribute('aria-expanded', String(apri)); };
 document.addEventListener('click', e => { if (!menu.hidden && !menu.contains(e.target)) chiudi(); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') chiudi(); });
+
+// Gallerie: foto attaccate, se una non carica resta il riquadro colorato
+document.querySelectorAll('[data-galleria]').forEach(g => {
+  ((window.GALLERIE || {})[g.dataset.galleria] || []).forEach((src, i) => {
+    const im = new Image(); im.alt = `Opera ${i + 1}`; im.loading = 'lazy'; im.decoding = 'async';
+    im.onerror = () => im.removeAttribute('src'); im.src = src; g.append(im);
+  });
+});
