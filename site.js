@@ -4,9 +4,9 @@ document.querySelectorAll('[data-wa]').forEach(a => { a.href = `https://wa.me/${
 document.querySelectorAll('[data-mail]').forEach(a => { a.href = `mailto:${C.email}?subject=${encodeURIComponent(a.dataset.mail)}`; });
 document.querySelectorAll('[data-mail-text]').forEach(a => { a.textContent = C.email; });
 
-// Foto: prova chi-sono.jpg, .jpeg, .png, .webp (anche maiuscole), poi il segnaposto .svg
+// Foto home: cerca foto/home/chi-sono.jpeg (o .jpg, .png, .webp), poi il segnaposto .svg
 document.querySelectorAll('.foto[data-foto]').forEach(f => {
-  const box = f.parentElement, c = ['jpg', 'jpeg', 'png', 'webp', 'JPG', 'JPEG', 'svg'].map(e => `${f.dataset.foto}.${e}`); let i = 0;
+  const box = f.parentElement, c = ['jpeg', 'jpg', 'png', 'webp', 'JPG', 'JPEG', 'svg'].map(e => `foto/home/${f.dataset.foto}.${e}`); let i = 0;
   f.onload = () => box.classList.add('ok');
   f.onerror = () => { if (++i < c.length) f.src = c[i]; else box.classList.add('ko'); };
   f.src = c[0];
@@ -19,10 +19,11 @@ burger.onclick = e => { e.stopPropagation(); const apri = menu.hidden; menu.hidd
 document.addEventListener('click', e => { if (!menu.hidden && !menu.contains(e.target)) chiudi(); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') chiudi(); });
 
-// Gallerie: foto attaccate, se una non carica resta il riquadro colorato
+// Gallerie: carica foto/<sezione>/1.jpeg, 2.jpeg, 3.jpeg... (foto attaccate; quelle che non esistono spariscono)
+const MAX_FOTO = (window.GALLERIE || {}).massimo || 12;
 document.querySelectorAll('[data-galleria]').forEach(g => {
-  ((window.GALLERIE || {})[g.dataset.galleria] || []).forEach((src, i) => {
-    const im = new Image(); im.alt = `Opera ${i + 1}`; im.loading = 'lazy'; im.decoding = 'async';
-    im.onerror = () => im.removeAttribute('src'); im.src = src; g.append(im);
-  });
+  for (let n = 1; n <= MAX_FOTO; n++) {
+    const im = new Image(); im.alt = `Opera ${n}`; im.loading = 'lazy'; im.decoding = 'async';
+    im.onerror = () => im.remove(); im.src = `foto/${g.dataset.galleria}/${n}.jpeg`; g.append(im);
+  }
 });
