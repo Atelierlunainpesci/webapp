@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://TUOUTENTE.github.io/NOME-REPO/sitemap.xml
