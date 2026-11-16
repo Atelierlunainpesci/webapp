@@ -71,3 +71,14 @@ a.servizio{color:inherit;transition:transform .15s}.vai{margin-top:auto;font-wei
 .flottante .btn{pointer-events:auto;box-shadow:0 8px 24px rgba(36,31,77,.3);padding:16px 38px;font-size:1.1rem}
 @media (hover:hover){a.servizio:hover{transform:translateY(-4px)}}
 @media (min-width:900px){.galleria{grid-template-columns:repeat(3,1fr)}.flottante{justify-content:flex-end}}
+
+/* DRIVE + PAGINA INSTALLA */
+.galleria.carica{position:relative;min-height:45vh;background:rgba(36,31,77,.08)}
+.galleria.carica::after{content:'';position:absolute;top:50%;left:50%;width:40px;height:40px;margin:-20px 0 0 -20px;border-radius:50%;border:4px solid rgba(36,31,77,.2);border-top-color:var(--ink);animation:gira .8s linear infinite}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:var(--paper);padding:6px;border-radius:99px;max-width:380px;margin:0 0 20px}
+.tabs button{font:inherit;font-weight:700;padding:12px;border-radius:99px;border:0;background:none;color:var(--ink);cursor:pointer}
+.tabs button[aria-pressed=true]{background:var(--rose)}
+.passi{list-style:none;counter-reset:p;padding:0;margin:0 0 24px;display:grid;gap:12px;max-width:680px}.passi[hidden]{display:none}
+.passi li{counter-increment:p;display:flex;gap:16px;align-items:center;background:var(--paper);border-radius:18px;padding:16px 20px}
+.passi li::before{content:counter(p);flex:none;width:38px;height:38px;border-radius:50%;background:var(--lilac);font-weight:700;display:grid;place-content:center}
+#one-tap[hidden]{display:none}#one-tap{border:0;font:inherit;font-weight:700;cursor:pointer}
