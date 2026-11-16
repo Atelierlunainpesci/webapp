@@ -1,24 +1,22 @@
 <!doctype html>
-<html lang="it">
+<html>
 
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <title>Servizi · Atelier Luna in Pesci</title>
-  <meta name="description"
-    content="Commissioni, ritrattini a portar via (live sketching per eventi e matrimoni) e progetti editoriali.">
+  <title data-i18n="page.services.title"></title>
+  <meta name="description" data-i18n-attr="content:page.services.description">
   <meta name="theme-color" content="#f4eeff">
   <link rel="manifest" href="../manifest.webmanifest">
   <link rel="apple-touch-icon" href="../assets/icons/apple-touch-icon.png">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="Luna in Pesci">
+  <meta name="apple-mobile-web-app-title" data-i18n-attr="content:common.appTitle">
   <meta property="og:type" content="website">
-  <meta property="og:locale" content="it_IT">
-  <meta property="og:site_name" content="Atelier Luna in Pesci">
-  <meta property="og:title" content="Servizi · Atelier Luna in Pesci">
-  <meta property="og:description"
-    content="Commissioni, ritrattini a portar via (live sketching per eventi e matrimoni) e progetti editoriali.">
+  <meta property="og:locale">
+  <meta property="og:site_name" data-i18n-attr="content:common.brandName">
+  <meta property="og:title" data-i18n-attr="content:page.services.title">
+  <meta property="og:description" data-i18n-attr="content:page.services.description">
   <link rel="icon" href="../assets/icons/favicon.svg" type="image/svg+xml">
   <link
     href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&family=Fraunces:wght@500;700&display=swap"
@@ -27,43 +25,41 @@
 </head>
 
 <body>
-  <a class="skip" href="#main">Vai al contenuto</a>
+  <a class="skip" href="#main" data-i18n="common.skip"></a>
   <header>
-    <a href="../index.html" class="brand" aria-label="Atelier Luna in Pesci, home"><svg class="moon" viewBox="0 0 32 32"
+    <a href="../index.html" class="brand" data-i18n-attr="aria-label:common.brandHome"><svg class="moon" viewBox="0 0 32 32"
         aria-hidden="true">
         <path d="M20 3a13 13 0 1 0 9 22A11 11 0 0 1 20 3z" fill="currentColor" />
-      </svg><span>Atelier Luna in Pesci</span></a>
-    <button id="burger" type="button" aria-label="Menu" aria-expanded="false"
+      </svg><span data-i18n="common.brandName"></span></a>
+    <button id="burger" type="button" data-i18n-attr="aria-label:common.menuButton" aria-expanded="false"
       aria-controls="menu"><span></span><span></span><span></span></button>
   </header>
-  <nav id="menu" class="menu" hidden aria-label="Menu principale">
-    <a href="../index.html">Home</a>
-    <a href="servizi.html" aria-current="page">Servizi</a><a href="lavora-con-me.html">Lavora con me</a><a
-      href="contatti.html">Contatti</a><a href="installa.html">Installa
-      l\'app</a>
+  <nav id="menu" class="menu" hidden data-i18n-attr="aria-label:common.mainMenu">
+    <a href="../index.html" data-i18n="common.home"></a>
+    <a href="servizi.html" aria-current="page" data-i18n="common.services"></a><a href="lavora-con-me.html" data-i18n="common.workWithMe"></a><a
+      href="contatti.html" data-i18n="common.contact"></a><a href="installa.html" data-i18n="common.install"></a>
   </nav>
   <main id="main">
     <!-- DESCRIZIONI DI PROVA: sostituisci con i tuoi testi -->
-    <h1>Servizi</h1>
-    <p class="lead">Tre modi per portare un po' d'arte nella tua vita.</p>
+    <h1 data-i18n="services.heading"></h1>
+    <p class="lead" data-i18n="services.intro"></p>
     <div class="servizi">
       <a class="servizio" href="commissioni.html">
-        <h2>Commissioni</h2>
-        <p>Opere create su misura per te: ritratti, illustrazioni e dipinti da regalare o da tenere.</p><span
-          class="vai">Scopri di più →</span>
+        <h2 data-i18n="commissions.heading"></h2>
+        <p data-i18n="services.commissions.description"></p><span
+          class="vai" data-i18n="common.more"></span>
       </a><a class="servizio" href="ritrattini-a-portar-via.html">
-        <h2>Ritrattini a portar via</h2>
-        <p class="sottotitolo">Live sketching per eventi e matrimoni</p>
-        <p>Un ritratto veloce, fatto dal vivo, che gli ospiti portano a casa come ricordo.</p><span class="vai">Scopri
-          di più →</span>
+        <h2 data-i18n="portraits.heading"></h2>
+        <p class="sottotitolo" data-i18n="portraits.subtitle"></p>
+        <p data-i18n="services.portraits.description"></p><span class="vai" data-i18n="common.more"></span>
       </a><a class="servizio" href="progetti-editoriali.html">
-        <h2>Progetti editoriali</h2>
-        <p>Illustrazioni per libri, riviste, copertine e progetti di autori e case editrici.</p><span class="vai">Scopri
-          di più →</span>
+        <h2 data-i18n="editorial.heading"></h2>
+        <p data-i18n="services.editorial.description"></p><span class="vai" data-i18n="common.more"></span>
       </a>
     </div>
   </main>
-  <footer>© 2026 Atelier Luna in Pesci</footer>
+  <footer data-i18n="common.footer"></footer>
+  <script src="../assets/js/i18n.js"></script>
   <script src="../assets/js/config.js"></script>
   <script src="../assets/js/site.js"></script>
 </body>

@@ -1,11 +1,11 @@
 <!doctype html>
-<html lang="it">
+<html>
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="robots" content="noindex">
-    <title>Test collegamento Drive</title>
+    <title data-i18n="driveTest.title"></title>
     <style>
         body {
             font: 16px/1.5 system-ui, sans-serif;
@@ -57,44 +57,45 @@
 </head>
 
 <body>
-    <h1>Test collegamento Drive</h1>
-    <p>Pagina di controllo: non è collegata al sito. Ogni riga dice cosa funziona e cosa no.</p>
+    <h1 data-i18n="driveTest.title"></h1>
+    <p data-i18n="driveTest.intro"></p>
     <ol id="log"></ol>
+    <script src="../assets/js/i18n.js"></script>
     <script src="../assets/js/config.js"></script>
     <script>
         const log = (ok, t, d = '') => { const li = document.createElement('li'); li.className = ok ? 'ok' : 'ko'; li.innerHTML = (ok ? '✓ ' : '✗ ') + t + (d ? `<small>${d}</small>` : ''); document.getElementById('log').append(li); return li };
         const C = (window.SITO || {}).drive || {};
-        const api = async (q, campi = 'files(id,name,mimeType)') => { const r = await fetch(`https://www.googleapis.com/drive/v3/files?q=${encodeURIComponent(q)}&fields=${encodeURIComponent(campi)}&pageSize=200&key=${C.apiKey}`, { referrerPolicy: 'no-referrer-when-downgrade' }); const j = await r.json().catch(() => ({})); if (!r.ok) { const e = new Error(j.error && j.error.message || ('HTTP ' + r.status)); e.status = r.status; e.reason = (j.error && j.error.errors && j.error.errors[0] && j.error.errors[0].reason) || ''; throw e } return j.files || [] };
+        const api = async (q, campi = 'files(id,name,mimeType)') => { const r = await fetch(`https://www.googleapis.com/drive/v3/files?q=${encodeURIComponent(q)}&fields=${encodeURIComponent(campi)}&pageSize=200&key=${C.apiKey}`, { referrerPolicy: 'no-referrer-when-downgrade' }); const j = await r.json().catch(() => ({})); if (!r.ok) { const e = new Error(j.error && j.error.message || I18N.t('driveTest.httpStatus', { status: r.status })); e.status = r.status; e.reason = (j.error && j.error.errors && j.error.errors[0] && j.error.errors[0].reason) || ''; throw e } return j.files || [] };
         const aiuto = e => {
             const m = (e.message + ' ' + e.reason).toLowerCase();
-            if (m.includes('referer')) return 'La chiave è limitata a un sito diverso da questo. Nelle restrizioni della chiave aggiungi: ' + location.origin + '/* (aspetta qualche minuto dopo il salvataggio).';
-            if (m.includes('api key not valid') || m.includes('keyinvalid')) return 'La chiave non è valida: ricontrolla di averla copiata per intero in assets/js/config.js.';
-            if (m.includes('has not been used') || m.includes('disabled') || m.includes('accessnotconfigured')) return 'Google Drive API non è abilitata nel progetto della chiave (API e servizi, Libreria, Google Drive API, Abilita).';
-            if (m.includes('not found') || e.status === 404) return 'Cartella non trovata o non condivisa con "Chiunque abbia il link", oppure ID errato in assets/js/config.js.';
-            if (m.includes('blocked') || m.includes('restricted')) return 'La chiave ha restrizioni API che escludono Google Drive API.';
-            return 'Errore sconosciuto: copia questo messaggio e mandalo.'
+            if (m.includes('referer')) return I18N.t('driveTest.refererHelp', { origin: location.origin });
+            if (m.includes('api key not valid') || m.includes('keyinvalid')) return I18N.t('driveTest.invalidKeyHelp');
+            if (m.includes('has not been used') || m.includes('disabled') || m.includes('accessnotconfigured')) return I18N.t('driveTest.apiDisabledHelp');
+            if (m.includes('not found') || e.status === 404) return I18N.t('driveTest.folderHelp');
+            if (m.includes('blocked') || m.includes('restricted')) return I18N.t('driveTest.restrictedHelp');
+            return I18N.t('driveTest.unknownError')
         };
         (async () => {
-            log(true, 'Indirizzo del sito', location.origin);
-            if (!C.apiKey) { log(false, 'Chiave API assente', 'Incolla la chiave in assets/js/config.js, campo drive.apiKey. Senza chiave il sito usa le foto della cartella foto/.'); return }
-            log(true, 'Chiave API presente', C.apiKey.slice(0, 6) + '…  |  cartella: ' + C.cartella);
+            log(true, I18N.t('driveTest.address'), location.origin);
+            if (!C.apiKey) { log(false, I18N.t('driveTest.noKey'), I18N.t('driveTest.noKeyDetails')); return }
+            log(true, I18N.t('driveTest.keyPresent'), C.apiKey.slice(0, 6) + I18N.t('driveTest.folderValue', { folder: C.cartella }));
             let sub;
-            try { sub = await api(`'${C.cartella}' in parents and trashed=false`); log(true, 'Cartella Drive raggiungibile', sub.length ? sub.map(x => x.name + (x.mimeType.endsWith('folder') ? '/' : '')).join(', ') : '(vuota)') }
-            catch (e) { log(false, 'Impossibile leggere la cartella Drive', `${e.message}<br><b>${aiuto(e)}</b>`); return }
+            try { sub = await api(`'${C.cartella}' in parents and trashed=false`); log(true, I18N.t('driveTest.folderReachable'), sub.length ? sub.map(x => x.name + (x.mimeType.endsWith('folder') ? '/' : '')).join(', ') : I18N.t('driveTest.unknownFolder')) }
+            catch (e) { log(false, I18N.t('driveTest.cannotRead'), `${e.message}<br><b>${aiuto(e)}</b>`); return }
             const norm = s => s.trim().toLowerCase(), fold = x => x.mimeType === 'application/vnd.google-apps.folder';
-            const foto = sub.find(x => fold(x) && norm(x.name) === 'foto'); log(!!foto, foto ? 'Trovata la cartella "foto"' : 'Cartella "foto" non trovata dentro la cartella condivisa', 'Se le sottocartelle sono direttamente nella cartella condivisa va bene lo stesso.');
+            const foto = sub.find(x => fold(x) && norm(x.name) === 'foto'); log(!!foto, foto ? I18N.t('driveTest.folderFound') : I18N.t('driveTest.folderMissing'), I18N.t('driveTest.subfoldersTip'));
             let liv = foto ? await api(`'${foto.id}' in parents and trashed=false`) : sub; liv = liv.filter(fold);
             let primo = null;
             for (const nome of ['home', 'commissioni', 'ritrattini', 'editoriali']) {
-                const c = liv.find(x => norm(x.name) === nome || norm(x.name).startsWith(nome)); if (!c) { log(false, `Cartella "${nome}" non trovata`, 'Nomi trovati: ' + (liv.map(x => x.name).join(', ') || 'nessuno')); continue }
+                const c = liv.find(x => norm(x.name) === nome || norm(x.name).startsWith(nome)); if (!c) { log(false, I18N.t('driveTest.folderNotFound', { name: nome }), I18N.t('driveTest.foldersFound', { names: liv.map(x => x.name).join(', ') || I18N.t('driveTest.noneFound') })); continue }
                 const f = await api(`'${c.id}' in parents and trashed=false`, 'files(id,name,mimeType,thumbnailLink)'); const im = f.filter(x => /^image\/(jpeg|png|webp)$/.test(x.mimeType)), altri = f.filter(x => !im.includes(x));
-                log(im.length > 0, `"${nome}": ${im.length} foto utilizzabili`, (im.slice(0, 4).map(x => x.name).join(', ') || '') + (altri.length ? `<br>Non utilizzabili (formato): ${altri.map(x => x.name + ' [' + x.mimeType + ']').join(', ')}` : ''));
+                log(im.length > 0, I18N.t('driveTest.usablePhotos', { name: nome, count: im.length }), (im.slice(0, 4).map(x => x.name).join(', ') || '') + (altri.length ? I18N.t('driveTest.unusablePhotos', { files: altri.map(x => x.name + ' [' + x.mimeType + ']').join(', ') }) : ''));
                 if (!primo && im[0]) primo = im[0];
             }
-            if (!primo) { log(false, 'Nessuna foto da provare a caricare'); return }
-            const prove = [['thumbnailLink dell\'API', primo.thumbnailLink && primo.thumbnailLink.replace(/=s\d+.*$/, '=w400')], ['lh3.googleusercontent.com', `https://lh3.googleusercontent.com/d/${primo.id}=w400`], ['drive.google.com/thumbnail', `https://drive.google.com/thumbnail?id=${primo.id}&sz=w400`]];
-            for (const [n, u] of prove) { if (!u) continue; const li = log(false, `Caricamento immagine ("${primo.name}") tramite ${n}`, 'in corso…'); await new Promise(ok => { const i = new Image(); i.referrerPolicy = 'no-referrer'; i.onload = () => { li.className = 'ok'; li.firstChild.textContent = '✓ '; li.querySelector('small').innerHTML = 'Funziona.'; li.append(i); ok() }; i.onerror = () => { li.querySelector('small').textContent = 'Non carica: la foto non è pubblica o Google blocca il collegamento.'; ok() }; i.src = u }) }
-        })().catch(e => log(false, 'Errore inatteso', e.message));
+            if (!primo) { log(false, I18N.t('driveTest.noPhotos')); return }
+            const prove = [[I18N.t('driveTest.thumbnailApi'), primo.thumbnailLink && primo.thumbnailLink.replace(/=s\d+.*$/, '=w400')], [I18N.t('driveTest.googleusercontent'), `https://lh3.googleusercontent.com/d/${primo.id}=w400`], [I18N.t('driveTest.driveThumbnail'), `https://drive.google.com/thumbnail?id=${primo.id}&sz=w400`]];
+            for (const [n, u] of prove) { if (!u) continue; const li = log(false, I18N.t('driveTest.loadingImage', { name: primo.name, method: n }), I18N.t('driveTest.inProgress')); await new Promise(ok => { const i = new Image(); i.referrerPolicy = 'no-referrer'; i.onload = () => { li.className = 'ok'; li.firstChild.textContent = '✓ '; li.querySelector('small').innerHTML = I18N.t('driveTest.works'); li.append(i); ok() }; i.onerror = () => { li.querySelector('small').textContent = I18N.t('driveTest.imageFailed'); ok() }; i.src = u }) }
+        })().catch(e => log(false, I18N.t('driveTest.unexpected'), e.message));
     </script>
 </body>
 

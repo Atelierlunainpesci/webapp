@@ -1,0 +1,31 @@
+{
+    "name": "Atelier Luna in Pesci",
+    "short_name": "Luna in Pesci",
+    "description": "Commissions, live portraits for events and weddings, and editorial projects.",
+    "start_url": "./",
+    "scope": "./",
+    "display": "standalone",
+    "background_color": "#f4eeff",
+    "theme_color": "#f4eeff",
+    "lang": "en",
+    "icons": [
+        {
+            "src": "assets/icons/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "assets/icons/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "assets/icons/icon-maskable-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
+        }
+    ]
+}

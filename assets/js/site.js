@@ -11,7 +11,7 @@ const TIPI = "(mimeType='image/jpeg' or mimeType='image/png' or mimeType='image/
 const attesa = (p, ms) => Promise.race([p, new Promise((_, no) => setTimeout(() => no(new Error('timeout')), ms))]);
 async function elenco(q, campi = 'files(id,name)') {
   const r = await attesa(fetch(`https://www.googleapis.com/drive/v3/files?q=${encodeURIComponent(q)}&fields=${encodeURIComponent(campi)}&pageSize=200&key=${DR.apiKey}`, { referrerPolicy: 'no-referrer-when-downgrade' }), 6000);
-  if (!r.ok) { let m = ''; try { m = (await r.json()).error.message; } catch (e) { } throw new Error(`Drive ${r.status} ${m}`); }
+  if (!r.ok) { let m = ''; try { m = (await r.json()).error.message; } catch (e) { } throw new Error(I18N.t('errors.driveRequestFailed', { status: r.status, message: m })); }
   return (await r.json()).files || [];
 }
 const norm = s => String(s).trim().toLowerCase();
@@ -24,7 +24,7 @@ async function fotoDrive(sezione) { // elenco ordinato per nome (1, 2, 10...), i
   if (c && Date.now() - c.t < 300000) return c.f;
   const sub = await sottocartelle(DR.cartella), radice = trova(sub, ['foto']) || DR.cartella;
   const id = trova(radice === DR.cartella ? sub : await sottocartelle(radice), ALIAS[sezione] || [sezione]);
-  if (!id) throw new Error(`Cartella "${sezione}" non trovata in Drive`);
+  if (!id) throw new Error(I18N.t('errors.driveFolderNotFound', { name: sezione }));
   const f = (await elenco(`'${id}' in parents and ${TIPI} and trashed=false`, 'files(id,name,thumbnailLink)')).sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
   if (f.length) { try { sessionStorage.setItem(k, JSON.stringify({ t: Date.now(), f })); } catch (e) { } }
   return f;
@@ -58,7 +58,7 @@ document.querySelectorAll('[data-galleria]').forEach(async g => {
     try {
       const fs = (await fotoDrive(sez)).slice(0, MAX_FOTO);
       const esiti = await Promise.all(fs.map((x, n) => new Promise(ok => {
-        const im = new Image(); im.alt = `Opera ${n + 1}`; im.decoding = 'async'; im.onload = () => ok(true);
+        const im = new Image(); im.alt = I18N.t('gallery.work', { number: n + 1 }); im.decoding = 'async'; im.onload = () => ok(true);
         provaImg(im, urlDrive(x, 1000), () => { im.remove(); ok(false); }); g.append(im);
       })));
       fatto = esiti.some(Boolean);
@@ -66,7 +66,7 @@ document.querySelectorAll('[data-galleria]').forEach(async g => {
     g.classList.remove('carica');
   }
   if (!fatto) for (let n = 1; n <= MAX_FOTO; n++) {
-    const im = new Image(); im.alt = `Opera ${n}`; im.loading = 'lazy'; im.decoding = 'async';
+    const im = new Image(); im.alt = I18N.t('gallery.work', { number: n }); im.loading = 'lazy'; im.decoding = 'async';
     im.onerror = () => im.remove(); im.src = new URL(`foto/${sez}/${n}.jpeg`, ROOT).href; g.append(im);
   }
 });

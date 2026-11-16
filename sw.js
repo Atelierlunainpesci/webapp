@@ -1,5 +1,5 @@
 // Service worker minimo: rete prima (sempre rivalidata), cache solo come ripiego offline. Serve per l'installazione come app.
-const V = 'luna-v1';
+const V = 'luna-v2';
 self.addEventListener('install', () => self.skipWaiting());
 self.addEventListener('activate', e => e.waitUntil(
   caches.keys().then(k => Promise.all(k.filter(n => n !== V).map(n => caches.delete(n)))).then(() => clients.claim())));

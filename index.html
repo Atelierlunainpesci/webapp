@@ -1,31 +1,31 @@
 <!doctype html>
-<html lang="it">
+<html>
 
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <title>Atelier Luna in Pesci · Chi sono</title>
+  <title data-i18n="page.home.title"></title>
   <meta name="description"
-    content="Atelier Luna in Pesci: ritratti, illustrazioni, live sketching per eventi e matrimoni e progetti editoriali. Scopri chi sono.">
+    data-i18n-attr="content:page.home.description">
   <meta name="theme-color" content="#f4eeff">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="Luna in Pesci">
+  <meta name="apple-mobile-web-app-title" data-i18n-attr="content:common.appTitle">
   <meta property="og:type" content="website">
-  <meta property="og:locale" content="it_IT">
-  <meta property="og:site_name" content="Atelier Luna in Pesci">
-  <meta property="og:title" content="Atelier Luna in Pesci · Chi sono">
+  <meta property="og:locale">
+  <meta property="og:site_name" data-i18n-attr="content:common.brandName">
+  <meta property="og:title" data-i18n-attr="content:page.home.title">
   <meta property="og:description"
-    content="Atelier Luna in Pesci: ritratti, illustrazioni, live sketching per eventi e matrimoni e progetti editoriali. Scopri chi sono.">
+    data-i18n-attr="content:page.home.description">
   <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml">
   <link
     href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&family=Fraunces:wght@500;700&display=swap"
     rel="stylesheet" media="print" onload="this.media='all'">
   <link rel="stylesheet" href="assets/css/style.css">
   <script
-    type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Atelier Luna in Pesci","email":"atelierlunainpesci@gmail.com","description":"Commissioni, ritrattini live per eventi e matrimoni, progetti editoriali."}</script>
+    type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","email":"atelierlunainpesci@gmail.com"}</script>
   <noscript>
     <style>
       .fotobox::after {
@@ -36,36 +36,34 @@
 </head>
 
 <body>
-  <a class="skip" href="#main">Vai al contenuto</a>
+  <a class="skip" href="#main" data-i18n="common.skip"></a>
   <header>
-    <a href="index.html" class="brand" aria-label="Atelier Luna in Pesci, home"><svg class="moon" viewBox="0 0 32 32"
-        aria-hidden="true">
+    <a href="index.html" class="brand"
+      data-i18n-attr="aria-label:common.brandHome"><svg class="moon" viewBox="0 0 32 32" aria-hidden="true">
         <path d="M20 3a13 13 0 1 0 9 22A11 11 0 0 1 20 3z" fill="currentColor" />
-      </svg><span>Atelier Luna in Pesci</span></a>
-    <button id="burger" type="button" aria-label="Menu" aria-expanded="false"
-      aria-controls="menu"><span></span><span></span><span></span></button>
+      </svg><span data-i18n="common.brandName"></span></a>
+    <button id="burger" type="button" data-i18n-attr="aria-label:common.menuButton"
+      aria-expanded="false" aria-controls="menu"><span></span><span></span><span></span></button>
   </header>
-  <nav id="menu" class="menu" hidden aria-label="Menu principale"><a href="index.html" aria-current="page">Home</a><a
-      href="view/servizi.html">Servizi</a><a href="view/lavora-con-me.html">Lavora con me</a><a
-      href="view/contatti.html">Contatti</a><a href="view/installa.html">Installa l\'app</a></nav>
+  <nav id="menu" class="menu" hidden data-i18n-attr="aria-label:common.mainMenu"><a
+      href="index.html" aria-current="page" data-i18n="common.home"></a><a href="view/servizi.html"
+      data-i18n="common.services"></a><a href="view/lavora-con-me.html" data-i18n="common.workWithMe"></a><a href="view/contatti.html" data-i18n="common.contact"></a><a href="view/installa.html"
+      data-i18n="common.install"></a></nav>
   <main id="main">
     <!-- TESTO DI PROVA: sostituisci con la tua presentazione -->
     <section class="chi">
-      <h1>Chi sono</h1>
-      <div class="fotobox"><img class="foto" data-foto="chi-sono"
-          alt="Ritratto dell'artista che sorride mentre dipinge"><noscript><img src="assets/images/chi-sono.svg"
-            alt="Ritratto dell'artista che sorride mentre dipinge"></noscript></div>
+      <h1 data-i18n="home.heading"></h1>
+      <div class="fotobox"><img class="foto" data-foto="chi-sono" data-i18n-attr="alt:home.photoAlt"></div>
       <div class="testo">
-        <p>Ciao, sono l'artista di Atelier Luna in Pesci. Dipingo ritratti, illustrazioni e piccoli mondi pieni di
-          colore, tra acquerello e matita.</p>
-        <p>Mi piace raccontare le persone attraverso i loro dettagli: un sorriso, uno sguardo, un gesto. Qui trovi i
-          miei lavori e i modi per lavorare insieme.</p>
-        <p class="azioni"><a class="btn" href="view/servizi.html">Scopri i servizi</a><a class="btn alt"
-            href="view/contatti.html">Scrivimi</a></p>
+        <p data-i18n="home.paragraph1"></p>
+        <p data-i18n="home.paragraph2"></p>
+        <p class="azioni"><a class="btn" href="view/servizi.html" data-i18n="home.servicesCta"></a><a
+            class="btn alt" href="view/contatti.html" data-i18n="home.contactCta"></a></p>
       </div>
     </section>
   </main>
-  <footer>© 2026 Atelier Luna in Pesci</footer>
+  <footer data-i18n="common.footer"></footer>
+  <script src="assets/js/i18n.js"></script>
   <script src="assets/js/config.js"></script>
   <script src="assets/js/site.js"></script>
 </body>

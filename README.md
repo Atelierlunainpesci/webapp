@@ -2,7 +2,8 @@
 
 ## Cosa modificare
 - `assets/js/config.js`: link Instagram, numero WhatsApp (con prefisso, senza +) ed email.
-- Testi: direttamente nei file `.html` (cerca i commenti "DI PROVA").
+- Testi e traduzioni: `assets/js/i18n.js`. Le pagine usano l'italiano se la lingua preferita del browser inizia con `it`; per tutte le altre lingue usano l'inglese. Per aggiungere un'etichetta, crea la stessa chiave nei dizionari `it` e `en` e applicala in HTML con `data-i18n` (oppure `data-i18n-attr` per gli attributi e `data-i18n-html` per i passaggi con formattazione).
+- Testi personalizzati: aggiorna le traduzioni corrispondenti in `assets/js/i18n.js`, comprese le versioni inglesi.
 - Foto home: sostituisci `foto/home/chi-sono.jpeg` (sono accettati anche .jpg, .png e .webp). Ridimensionala a circa 1200 px e sotto i 500 KB.
 
 ## Struttura
