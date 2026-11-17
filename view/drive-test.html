@@ -5,15 +5,38 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="robots" content="noindex">
+    <meta name="theme-color" content="#AF7C30" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#75551F" media="(prefers-color-scheme: dark)">
+    <script src="../assets/js/theme.js"></script>
     <title data-i18n="driveTest.title"></title>
     <style>
+        :root {
+            color-scheme: light;
+            --bg: #AF7C30;
+            --ink: #2A1815;
+            --paper: #FFF9F0;
+            --line: #7C5F43;
+            --ok: #657546;
+            --error: #79253E
+        }
+
+        :root[data-theme="dark"] {
+            color-scheme: dark;
+            --bg: #75551F;
+            --ink: #F4E8D8;
+            --paper: #80602A;
+            --line: #9B8069;
+            --ok: #B5C58F;
+            --error: #DCA077
+        }
+
         body {
             font: 16px/1.5 system-ui, sans-serif;
             max-width: 720px;
             margin: 0 auto;
             padding: 20px;
-            background: #f4eeff;
-            color: #241f4d
+            background: var(--bg);
+            color: var(--ink)
         }
 
         h1 {
@@ -23,18 +46,18 @@
         li {
             margin: 8px 0;
             padding: 10px 12px;
-            background: #fff;
+            background: var(--paper);
             border-radius: 10px;
             list-style: none;
-            border-left: 6px solid #999
+            border-left: 6px solid var(--line)
         }
 
         li.ok {
-            border-color: #2e9d6f
+            border-color: var(--ok)
         }
 
         li.ko {
-            border-color: #d6336c
+            border-color: var(--error)
         }
 
         ol {
@@ -88,7 +111,7 @@
             let primo = null;
             for (const nome of ['home', 'commissioni', 'ritrattini', 'editoriali']) {
                 const c = liv.find(x => norm(x.name) === nome || norm(x.name).startsWith(nome)); if (!c) { log(false, I18N.t('driveTest.folderNotFound', { name: nome }), I18N.t('driveTest.foldersFound', { names: liv.map(x => x.name).join(', ') || I18N.t('driveTest.noneFound') })); continue }
-                const f = await api(`'${c.id}' in parents and trashed=false`, 'files(id,name,mimeType,thumbnailLink)'); const im = f.filter(x => /^image\/(jpeg|png|webp)$/.test(x.mimeType)), altri = f.filter(x => !im.includes(x));
+                const f = await api(`'${c.id}' in parents and trashed=false`, 'files(id,name,mimeType,thumbnailLink)'); const im = f.filter(x => x.mimeType && x.mimeType.startsWith('image/')), altri = f.filter(x => !im.includes(x));
                 log(im.length > 0, I18N.t('driveTest.usablePhotos', { name: nome, count: im.length }), (im.slice(0, 4).map(x => x.name).join(', ') || '') + (altri.length ? I18N.t('driveTest.unusablePhotos', { files: altri.map(x => x.name + ' [' + x.mimeType + ']').join(', ') }) : ''));
                 if (!primo && im[0]) primo = im[0];
             }
