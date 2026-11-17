@@ -1,15 +1,23 @@
-# Cartella foto
+# Foto
 
-Per cambiare una foto basta sostituire il file, con lo stesso nome, nella cartella giusta.
+## Aggiornamento automatico con Google Drive
 
-| Cartella | Dove compare | File |
-|---|---|---|
-| `home/` | Home, sezione Chi sono | `chi-sono.jpeg` |
-| `commissioni/` | Galleria della pagina Commissioni | `1.jpeg`, `2.jpeg`, `3.jpeg`... |
-| `ritrattini/` | Galleria della pagina Ritrattini a portar via | `1.jpeg`, `2.jpeg`, `3.jpeg`... |
-| `editoriali/` | Galleria della pagina Progetti editoriali | `1.jpeg`, `2.jpeg`, `3.jpeg`... |
+Se Drive è configurato in `assets/js/config.js`, carica o sostituisci le immagini direttamente nella cartella condivisa:
 
-- Le gallerie mostrano le foto in ordine di numero, fino a 12 (si alza in `../assets/js/gallerie.js`). Per avere meno foto, elimina i file in più.
-- Il nome deve essere esatto: minuscolo, estensione `.jpeg` (per `chi-sono` vanno bene anche .jpg, .png, .webp).
-- Peso consigliato: sotto i 300 KB per foto, circa 1000 px di lato per le gallerie e 1400 px per la home.
-- Le foto di adesso sono segnaposto: sostituiscile con le tue.
+| Cartella Drive | Dove compaiono |
+|---|---|
+| `foto/home/` | Foto nella home |
+| `foto/commissioni/` | Galleria Commissioni |
+| `foto/ritrattini/` | Galleria Ritrattini a portar via |
+| `foto/editoriali/` | Galleria Progetti editoriali |
+
+Non serve mantenere nomi o estensioni specifiche: le gallerie rilevano automaticamente i file immagine e li ordinano per nome (numeri compresi). La home preferisce una foto il cui nome inizia con `chi-sono`; se non c'è, usa la prima. Le gallerie mostrano fino a 12 immagini. Il sito rilegge Drive quando viene aperta la pagina; l'elenco resta in cache per al massimo 30 secondi.
+
+Sono accettati anche file HEIC se Google Drive riesce a generarne l'anteprima. Se una foto non appare, aprila in Drive per verificare che sia visibile e che abbia un'anteprima.
+
+## Foto locali di ripiego
+
+Se Drive non è configurato o non è raggiungibile, il sito usa questa cartella del repository:
+
+- Home: `home/chi-sono.jpeg` (sono accettati anche `.jpg`, `.png`, `.webp` e `.svg`).
+- Gallerie: `commissioni/`, `ritrattini/`, `editoriali/` con file `1.jpeg`, `2.jpeg`, `3.jpeg`... fino a 12.

@@ -7,25 +7,35 @@ document.querySelectorAll('[data-mail-text]').forEach(a => { a.textContent = C.e
 
 // ---- Foto: da Google Drive (se in assets/js/config.js c'è la chiave API) oppure dalla cartella foto/ del sito ----
 const DR = (C.drive && C.drive.apiKey && C.drive.cartella) ? C.drive : null;
-const TIPI = "(mimeType='image/jpeg' or mimeType='image/png' or mimeType='image/webp')";
 const attesa = (p, ms) => Promise.race([p, new Promise((_, no) => setTimeout(() => no(new Error('timeout')), ms))]);
 async function elenco(q, campi = 'files(id,name)') {
-  const r = await attesa(fetch(`https://www.googleapis.com/drive/v3/files?q=${encodeURIComponent(q)}&fields=${encodeURIComponent(campi)}&pageSize=200&key=${DR.apiKey}`, { referrerPolicy: 'no-referrer-when-downgrade' }), 6000);
-  if (!r.ok) { let m = ''; try { m = (await r.json()).error.message; } catch (e) { } throw new Error(I18N.t('errors.driveRequestFailed', { status: r.status, message: m })); }
-  return (await r.json()).files || [];
+  const files = [];
+  let pageToken = '';
+  do {
+    const pagina = new URLSearchParams({ q, fields: `nextPageToken,${campi}`, pageSize: '1000', key: DR.apiKey });
+    if (pageToken) pagina.set('pageToken', pageToken);
+    const r = await attesa(fetch(`https://www.googleapis.com/drive/v3/files?${pagina}`, { referrerPolicy: 'no-referrer-when-downgrade' }), 6000);
+    if (!r.ok) { let m = ''; try { m = (await r.json()).error.message; } catch (e) { } throw new Error(I18N.t('errors.driveRequestFailed', { status: r.status, message: m })); }
+    const dati = await r.json();
+    files.push(...(dati.files || []));
+    pageToken = dati.nextPageToken || '';
+  } while (pageToken);
+  return files;
 }
 const norm = s => String(s).trim().toLowerCase();
 const ALIAS = { home: ['home'], commissioni: ['commissioni'], ritrattini: ['ritrattini'], editoriali: ['editoriali', 'progetti editoriali'] };
 const sottocartelle = padre => elenco(`'${padre}' in parents and mimeType='application/vnd.google-apps.folder' and trashed=false`);
 const trova = (lista, nomi) => (lista.find(c => nomi.includes(norm(c.name))) || lista.find(c => nomi.some(n => norm(c.name).startsWith(n))) || {}).id;
-async function fotoDrive(sezione) { // elenco ordinato per nome (1, 2, 10...), in cache 5 minuti
+async function fotoDrive(sezione) { // elenco ordinato per nome (1, 2, 10...), in cache 30 secondi
   const k = 'luna-drive-' + sezione; let c = null;
   try { c = JSON.parse(sessionStorage.getItem(k) || 'null'); } catch (e) { }
-  if (c && Date.now() - c.t < 300000) return c.f;
+  if (c && Date.now() - c.t < 30000) return c.f;
   const sub = await sottocartelle(DR.cartella), radice = trova(sub, ['foto']) || DR.cartella;
   const id = trova(radice === DR.cartella ? sub : await sottocartelle(radice), ALIAS[sezione] || [sezione]);
   if (!id) throw new Error(I18N.t('errors.driveFolderNotFound', { name: sezione }));
-  const f = (await elenco(`'${id}' in parents and ${TIPI} and trashed=false`, 'files(id,name,thumbnailLink)')).sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
+  const f = (await elenco(`'${id}' in parents and trashed=false`, 'files(id,name,mimeType,thumbnailLink)'))
+    .filter(x => x.mimeType && x.mimeType.startsWith('image/'))
+    .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
   if (f.length) { try { sessionStorage.setItem(k, JSON.stringify({ t: Date.now(), f })); } catch (e) { } }
   return f;
 }
@@ -48,24 +58,24 @@ burger.onclick = e => { e.stopPropagation(); const apri = menu.hidden; menu.hidd
 document.addEventListener('click', e => { if (!menu.hidden && !menu.contains(e.target)) chiudi(); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') chiudi(); });
 
-// Gallerie: da Drive (cartella della sezione) oppure foto/<sezione>/1.jpeg, 2.jpeg... del sito.
-// Se da Drive non arriva nemmeno una foto (errore, cartella vuota o immagini bloccate) si usano quelle del sito.
+// Gallerie: Drive è la fonte principale quando risponde; le foto locali sono il ripiego in caso di errore.
 const MAX_FOTO = (window.GALLERIE || {}).massimo || 12;
 document.querySelectorAll('[data-galleria]').forEach(async g => {
-  const sez = g.dataset.galleria; let fatto = false;
+  const sez = g.dataset.galleria; let driveDisponibile = false;
   if (DR) {
     g.classList.add('carica');
     try {
       const fs = (await fotoDrive(sez)).slice(0, MAX_FOTO);
+      driveDisponibile = true;
       const esiti = await Promise.all(fs.map((x, n) => new Promise(ok => {
         const im = new Image(); im.alt = I18N.t('gallery.work', { number: n + 1 }); im.decoding = 'async'; im.onload = () => ok(true);
         provaImg(im, urlDrive(x, 1000), () => { im.remove(); ok(false); }); g.append(im);
       })));
-      fatto = esiti.some(Boolean);
+      if (!esiti.some(Boolean) && fs.length) console.warn('[Drive] Nessuna anteprima immagine è stata caricata.');
     } catch (e) { console.warn('[Drive]', e.message); }
     g.classList.remove('carica');
   }
-  if (!fatto) for (let n = 1; n <= MAX_FOTO; n++) {
+  if (!driveDisponibile) for (let n = 1; n <= MAX_FOTO; n++) {
     const im = new Image(); im.alt = I18N.t('gallery.work', { number: n }); im.loading = 'lazy'; im.decoding = 'async';
     im.onerror = () => im.remove(); im.src = new URL(`foto/${sez}/${n}.jpeg`, ROOT).href; g.append(im);
   }

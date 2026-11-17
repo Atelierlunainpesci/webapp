@@ -1,10 +1,38 @@
 :root {
-  --bg: #f4eeff;
-  --ink: #241f4d;
-  --rose: #ff7f9c;
-  --mint: #7fd1c0;
-  --lilac: #c9b8ff;
-  --paper: #fff
+  color-scheme: light;
+  --bg: #AF7C30;
+  --ink: #2A1815;
+  --accent: #79253E;
+  --button-ink: #fffaf3;
+  --ochre: #AF7C30;
+  --terracotta: #B96C4A;
+  --accent-soft: #F1E2E3;
+  --ochre-soft: #F5E8D0;
+  --paper: #FFF9F0;
+  --shadow-color: 54, 34, 22;
+  --glow-accent: rgba(121, 37, 62, .15);
+  --glow-ochre: rgba(255, 235, 194, .35);
+  --placeholder-1: #E8D4B7;
+  --placeholder-2: #E9C9B9;
+  --placeholder-3: #D8C6A7
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --ink: #F4E8D8;
+  --accent: #DCA077;
+  --button-ink: #2A1815;
+  --ochre: #E0B45C;
+  --terracotta: #D79A68;
+  --accent-soft: #674746;
+  --ochre-soft: #66503A;
+  --paper: #80602A;
+  --shadow-color: 25, 15, 12;
+  --glow-accent: rgba(220, 160, 119, .18);
+  --glow-ochre: rgba(224, 180, 92, .16);
+  --placeholder-1: #725747;
+  --placeholder-2: #704B3F;
+  --placeholder-3: #66563E
 }
 
 * {
@@ -28,7 +56,7 @@ body::before {
   position: fixed;
   inset: 0;
   z-index: -1;
-  background: radial-gradient(circle at 92% 6%, rgba(255, 127, 156, .3), transparent 36%), radial-gradient(circle at 4% 60%, rgba(127, 209, 192, .3), transparent 40%)
+  background: radial-gradient(circle at 92% 6%, var(--glow-accent), transparent 36%), radial-gradient(circle at 4% 60%, var(--glow-ochre), transparent 40%)
 }
 
 a {
@@ -53,7 +81,7 @@ h2,
   left: -999px;
   top: 8px;
   background: var(--ink);
-  color: #fff;
+  color: var(--button-ink);
   padding: 8px 14px;
   border-radius: 8px;
   z-index: 60
@@ -77,7 +105,7 @@ header {
   align-items: center;
   background: var(--paper);
   border-radius: 18px;
-  box-shadow: 0 6px 24px rgba(36, 31, 77, .15);
+  box-shadow: 0 6px 24px rgba(var(--shadow-color), .15);
   z-index: 20
 }
 
@@ -93,7 +121,7 @@ header {
 .moon {
   width: 26px;
   height: 26px;
-  color: var(--rose)
+  color: var(--accent)
 }
 
 #burger {
@@ -139,7 +167,7 @@ header {
   background: var(--paper);
   border-radius: 18px;
   padding: 8px;
-  box-shadow: 0 12px 32px rgba(36, 31, 77, .2);
+  box-shadow: 0 12px 32px rgba(var(--shadow-color), .2);
   z-index: 19;
   display: grid
 }
@@ -160,7 +188,7 @@ header {
 }
 
 .menu a[aria-current] {
-  background: var(--lilac)
+  background: var(--accent-soft)
 }
 
 main {
@@ -186,8 +214,8 @@ h1 {
 
 .btn {
   display: inline-block;
-  background: var(--rose);
-  color: var(--ink);
+  background: var(--accent);
+  color: var(--button-ink);
   font-weight: 700;
   padding: 14px 24px;
   border-radius: 99px;
@@ -196,6 +224,7 @@ h1 {
 
 .btn.alt {
   background: var(--paper);
+  color: var(--ink);
   box-shadow: inset 0 0 0 2px var(--ink)
 }
 
@@ -215,7 +244,7 @@ h1 {
   aspect-ratio: 4/3;
   border-radius: 32px 32px 32px 120px;
   overflow: hidden;
-  background: rgba(36, 31, 77, .08);
+  background: rgba(var(--shadow-color), .08);
   margin-bottom: 24px
 }
 
@@ -243,7 +272,7 @@ h1 {
   height: 40px;
   margin: -20px 0 0 -20px;
   border-radius: 50%;
-  border: 4px solid rgba(36, 31, 77, .2);
+  border: 4px solid rgba(var(--shadow-color), .2);
   border-top-color: var(--ink);
   animation: gira .8s linear infinite
 }
@@ -272,18 +301,18 @@ h1 {
   border-radius: 24px;
   padding: 24px;
   margin-bottom: 16px;
-  border-top: 8px solid var(--rose);
+  border-top: 8px solid var(--accent);
   display: flex;
   flex-direction: column;
   align-items: flex-start
 }
 
 .servizio:nth-child(2) {
-  border-top-color: var(--mint)
+  border-top-color: var(--ochre)
 }
 
 .servizio:nth-child(3) {
-  border-top-color: var(--lilac)
+  border-top-color: var(--terracotta)
 }
 
 .servizio h2 {
@@ -324,7 +353,7 @@ h1 {
 }
 
 .social svg {
-  color: var(--rose);
+  color: var(--accent);
   flex: none
 }
 
@@ -467,7 +496,7 @@ a.servizio {
   margin-top: auto;
   font-weight: 700;
   text-decoration: underline;
-  text-decoration-color: var(--rose);
+  text-decoration-color: var(--accent);
   text-decoration-thickness: 3px;
   text-underline-offset: 5px
 }
@@ -500,7 +529,7 @@ a.servizio {
 }
 
 .prezzi th {
-  background: var(--lilac)
+  background: var(--ochre-soft)
 }
 
 .prezzi th:last-child,
@@ -568,15 +597,15 @@ a.servizio {
 }
 
 .galleria img:nth-child(3n+1) {
-  background: #c9b8ff
+  background: var(--placeholder-1)
 }
 
 .galleria img:nth-child(3n+2) {
-  background: #ffc2cf
+  background: var(--placeholder-2)
 }
 
 .galleria img:nth-child(3n) {
-  background: #bfe9e1
+  background: var(--placeholder-3)
 }
 
 .flottante {
@@ -591,7 +620,7 @@ a.servizio {
 
 .flottante .btn {
   pointer-events: auto;
-  box-shadow: 0 8px 24px rgba(36, 31, 77, .3);
+  box-shadow: 0 8px 24px rgba(var(--shadow-color), .3);
   padding: 16px 38px;
   font-size: 1.1rem
 }
@@ -616,7 +645,7 @@ a.servizio {
 .galleria.carica {
   position: relative;
   min-height: 45vh;
-  background: rgba(36, 31, 77, .08)
+  background: rgba(var(--shadow-color), .08)
 }
 
 .galleria.carica::after {
@@ -628,7 +657,7 @@ a.servizio {
   height: 40px;
   margin: -20px 0 0 -20px;
   border-radius: 50%;
-  border: 4px solid rgba(36, 31, 77, .2);
+  border: 4px solid rgba(var(--shadow-color), .2);
   border-top-color: var(--ink);
   animation: gira .8s linear infinite
 }
@@ -656,7 +685,8 @@ a.servizio {
 }
 
 .tabs button[aria-pressed=true] {
-  background: var(--rose)
+  background: var(--accent);
+  color: var(--button-ink)
 }
 
 .passi {
@@ -689,7 +719,7 @@ a.servizio {
   width: 38px;
   height: 38px;
   border-radius: 50%;
-  background: var(--lilac);
+  background: var(--ochre-soft);
   font-weight: 700;
   display: grid;
   place-content: center
