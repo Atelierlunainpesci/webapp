@@ -76,10 +76,22 @@
             border-radius: 6px;
             vertical-align: middle
         }
+
+        .home-return {
+            display: inline-block;
+            margin-bottom: 16px;
+            padding: 10px 16px;
+            border-radius: 99px;
+            background: var(--paper);
+            color: var(--ink);
+            font-weight: 700;
+            text-decoration: none
+        }
     </style>
 </head>
 
 <body>
+    <a class="home-return" href="../index.html" data-i18n="common.backHome"></a>
     <h1 data-i18n="driveTest.title"></h1>
     <p data-i18n="driveTest.intro"></p>
     <ol id="log"></ol>

@@ -96,7 +96,7 @@ const galleryAliases = {
   home: ['home'],
   commissioni: ['commissioni'],
   ritrattini: ['ritrattini'],
-  editoriali: ['editoriali', 'progetti editoriali'],
+  editoriali: ['editoriali', 'illustrazioni'],
 };
 
 // Fetch all folders directly inside a parent folder.
@@ -277,6 +277,26 @@ const loadGallery = async galleryElement => {
   const sectionName = galleryElement.dataset.galleria;
   const maximumPhotos = (window.GALLERIE || {}).massimo || 12;
   let driveLoaded = false;
+  const captionKey = galleryElement.dataset.caption;
+
+  const createGalleryItem = imageNumber => {
+    if (!captionKey) {
+      const imageElement = new Image();
+      imageElement.alt = I18N.t('gallery.work', { number: imageNumber });
+      imageElement.decoding = 'async';
+      return { container: imageElement, image: imageElement };
+    }
+
+    const figure = document.createElement('figure');
+    const imageElement = new Image();
+    const caption = I18N.t(captionKey, { number: imageNumber });
+    const captionElement = document.createElement('figcaption');
+    imageElement.alt = caption;
+    imageElement.decoding = 'async';
+    captionElement.textContent = caption;
+    figure.append(imageElement, captionElement);
+    return { container: figure, image: imageElement };
+  };
 
   if (driveConfiguration) {
     galleryElement.classList.add('carica');
@@ -291,22 +311,20 @@ const loadGallery = async galleryElement => {
         driveFiles.map(
           (driveFile, imageIndex) =>
             new Promise(resolve => {
-              const imageElement = new Image();
-              imageElement.alt = I18N.t('gallery.work', {
-                number: imageIndex + 1,
-              });
-              imageElement.decoding = 'async';
+              const { container, image: imageElement } = createGalleryItem(
+                imageIndex + 1,
+              );
               imageElement.onload = () => resolve(true);
 
               tryImageSources(
                 imageElement,
                 buildDriveImageUrls(driveFile, 1000),
                 () => {
-                  imageElement.remove();
+                  container.remove();
                   resolve(false);
                 },
               );
-              galleryElement.append(imageElement);
+              galleryElement.append(container);
             }),
         ),
       );
@@ -324,16 +342,14 @@ const loadGallery = async galleryElement => {
 
   if (!driveLoaded) {
     for (let imageNumber = 1; imageNumber <= maximumPhotos; imageNumber++) {
-      const imageElement = new Image();
-      imageElement.alt = I18N.t('gallery.work', { number: imageNumber });
+      const { container, image: imageElement } = createGalleryItem(imageNumber);
       imageElement.loading = 'lazy';
-      imageElement.decoding = 'async';
-      imageElement.onerror = () => imageElement.remove();
+      imageElement.onerror = () => container.remove();
       imageElement.src = new URL(
         `foto/${sectionName}/${imageNumber}.jpeg`,
         siteRoot,
       ).href;
-      galleryElement.append(imageElement);
+      galleryElement.append(container);
     }
   }
 };

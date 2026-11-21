@@ -49,9 +49,10 @@
   </header>
   <nav id="menu" class="menu" hidden data-i18n-attr="aria-label:common.mainMenu"><a
       href="index.html" aria-current="page" data-i18n="common.home"></a><a href="view/servizi.html"
-      data-i18n="common.services"></a><a href="view/lavora-con-me.html" data-i18n="common.workWithMe"></a><a href="view/contatti.html" data-i18n="common.contact"></a><a href="view/installa.html"
+      data-i18n="common.services"></a><a href="view/contatti.html" data-i18n="common.contact"></a><a href="view/installa.html"
       data-i18n="common.install"></a></nav>
   <main id="main">
+        <a class="btn alt home-return" href="index.html" data-i18n="common.backHome"></a>
     <!-- TESTO DI PROVA: sostituisci con la tua presentazione -->
     <section class="chi">
       <h1 data-i18n="home.heading"></h1>
@@ -59,10 +60,33 @@
       <div class="testo">
         <p data-i18n="home.paragraph1"></p>
         <p data-i18n="home.paragraph2"></p>
-        <p class="azioni"><a class="btn" href="view/servizi.html" data-i18n="home.servicesCta"></a><a
-            class="btn alt" href="view/contatti.html" data-i18n="home.contactCta"></a></p>
       </div>
     </section>
+    <details class="servizio portfolio-lavori">
+      <summary>
+        <h2 data-i18n="portfolio.heading"></h2>
+      </summary>
+      <div class="servizio-contenuto">
+        <p class="lead" data-i18n="portfolio.intro"></p>
+        <section class="portfolio-sezione">
+          <h2 data-i18n="portfolio.commissionsHeading"></h2>
+          <p data-i18n="portfolio.commissionsDescription"></p>
+          <div class="galleria" data-galleria="commissioni" data-caption="portfolio.commissionCaption"></div>
+        </section>
+        <section class="portfolio-sezione">
+          <h2 data-i18n="portfolio.portraitsHeading"></h2>
+          <p data-i18n="portfolio.portraitsDescription"></p>
+          <div class="galleria" data-galleria="ritrattini" data-caption="portfolio.portraitCaption"></div>
+        </section>
+        <section class="portfolio-sezione">
+          <h2 data-i18n="portfolio.illustrationsHeading"></h2>
+          <p data-i18n="portfolio.illustrationsDescription"></p>
+          <div class="galleria" data-galleria="editoriali" data-caption="portfolio.illustrationCaption"></div>
+        </section>
+      </div>
+    </details>
+    <p class="azioni"><a class="btn" href="view/servizi.html" data-i18n="home.servicesCta"></a><a
+        class="btn alt" href="view/contatti.html" data-i18n="home.contactCta"></a></p>
   </main>
   <footer data-i18n="common.footer"></footer>
   <script src="assets/js/i18n.js"></script>

@@ -5,7 +5,7 @@
 - Testi e traduzioni: `assets/js/i18n.js`. Le pagine usano l'italiano se la lingua preferita del browser inizia con `it`; per tutte le altre lingue usano l'inglese. Per aggiungere un'etichetta, crea la stessa chiave nei dizionari `it` e `en` e applicala in HTML con `data-i18n` (oppure `data-i18n-attr` per gli attributi e `data-i18n-html` per i passaggi con formattazione).
 - Testi personalizzati: aggiorna le traduzioni corrispondenti in `assets/js/i18n.js`, comprese le versioni inglesi.
 - Tema: segue la preferenza del dispositivo. In locale puoi forzarlo aggiungendo `?theme=dark` oppure `?theme=white` (anche `?theme=light`) all'indirizzo; la scelta resta attiva navigando tra le pagine. Rimuovi il parametro per tornare alla preferenza del dispositivo. Il test non è attivo sul sito pubblicato.
-- Foto home locale di ripiego: `foto/home/chi-sono.jpeg` (sono accettati anche .jpg, .png e .webp). Per aggiornare le foto da Drive senza modificare il codice, segui la sezione [Foto da Google Drive](#foto-da-google-drive-facoltativo).
+- Foto home locale di ripiego: `foto/home/chi-sono.jpeg` (sono accettati anche .jpg, .png e .webp). Portfolio e gallerie usano le cartelle sotto `foto/`. Per aggiornare le foto da Drive senza modificare il codice, segui la sezione [Foto da Google Drive](#foto-da-google-drive-facoltativo).
 
 ## Struttura
 - `view/`: pagine interne del sito.
@@ -24,7 +24,7 @@
 3. Metti il link del sito nella bio di Instagram.
 
 ## Foto da Google Drive (facoltativo)
-1. Crea una cartella Drive condivisa con "Chiunque abbia il link", Visualizzatore. Dentro crea `foto/home`, `foto/commissioni`, `foto/ritrattini`, `foto/editoriali`.
+1. Crea una cartella Drive condivisa con "Chiunque abbia il link", Visualizzatore. Dentro crea `foto/home`, `foto/commissioni`, `foto/ritrattini` e `foto/editoriali` (illustrazioni nel portfolio).
 2. console.cloud.google.com: nuovo progetto, Libreria, abilita "Google Drive API".
 3. Credenziali, Crea credenziali, Chiave API. Modificala: Restrizioni applicazione = Siti web, aggiungi `https://TUOUTENTE.github.io/*`; Restrizioni API = solo Google Drive API.
 4. Incolla la chiave in `assets/js/config.js`, campo `drive.apiKey`.

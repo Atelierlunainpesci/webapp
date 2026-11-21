@@ -3,7 +3,7 @@ window.SITO = {
   instagram: 'https://www.instagram.com/atelierlunainpesci/', // Example: add the profile link
   whatsapp: '393405241284', // Example: number with country code and without + (e.g. 393331234567)
   email: 'atelierlunainpesci@gmail.com',
-  // GOOGLE DRIVE: shared folder ("Anyone with the link", Viewer) containing foto/home, foto/commissioni, foto/ritrattini, and foto/editoriali.
+  // GOOGLE DRIVE: shared folder ("Anyone with the link", Viewer) containing foto/home, foto/commissioni, foto/ritrattini, and foto/editoriali for the portfolio.
   // Add the API key between the quotes. When it is empty, the site uses the repository's foto/ folder.
   drive: {
     cartella: '1dnbdosyUPAu-sxVzMCaiHvzguhD9wmNu',

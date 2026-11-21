@@ -1,5 +1,5 @@
 // Cache only as an offline fallback while always prioritizing network responses.
-const cacheVersion = 'luna-v2';
+const cacheVersion = 'luna-v4';
 self.addEventListener('install', () => self.skipWaiting());
 self.addEventListener('activate', event => event.waitUntil(
   caches.keys().then(cacheNames => Promise.all(cacheNames.filter(cacheName => cacheName !== cacheVersion).map(cacheName => caches.delete(cacheName)))).then(() => clients.claim())));
