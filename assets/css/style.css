@@ -1,38 +1,39 @@
 :root {
   color-scheme: light;
-  --bg: #AF7C30;
+  --bg: #F4F4F4;
   --ink: #2A1815;
-  --accent: #79253E;
-  --button-ink: #fffaf3;
-  --ochre: #AF7C30;
-  --terracotta: #B96C4A;
-  --accent-soft: #F1E2E3;
-  --ochre-soft: #F5E8D0;
-  --paper: #FFF9F0;
-  --shadow-color: 54, 34, 22;
-  --glow-accent: rgba(121, 37, 62, .15);
-  --glow-ochre: rgba(255, 235, 194, .35);
-  --placeholder-1: #E8D4B7;
-  --placeholder-2: #E9C9B9;
-  --placeholder-3: #D8C6A7
+  --accent: #883D37; /* Rosso mattone / Borgogna */
+  --button-ink: #FFFFFF;
+  --ochre: #C5AF58; /* Oro / Ocra metallizzato */
+  --terracotta: #A66337; /* Terracotta / Rame caldo */
+  --accent-soft: #F9EBEA;
+  --ochre-soft: #FBF7E9;
+  --paper: #FFFFFF;
+  --shadow-color: 42, 24, 21;
+  --glow-accent: rgba(136, 61, 55, .15);
+  --glow-ochre: rgba(197, 175, 88, .25);
+  --placeholder-1: #E6D383;
+  --placeholder-2: #D29A73;
+  --placeholder-3: #7C877C;
 }
 
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --ink: #F4E8D8;
-  --accent: #DCA077;
-  --button-ink: #2A1815;
-  --ochre: #E0B45C;
-  --terracotta: #D79A68;
-  --accent-soft: #674746;
-  --ochre-soft: #66503A;
-  --paper: #80602A;
-  --shadow-color: 25, 15, 12;
-  --glow-accent: rgba(220, 160, 119, .18);
-  --glow-ochre: rgba(224, 180, 92, .16);
-  --placeholder-1: #725747;
-  --placeholder-2: #704B3F;
-  --placeholder-3: #66563E
+  --bg: #221C1A;
+  --ink: #F4F4F4;
+  --accent: #B25852;
+  --button-ink: #FFFFFF;
+  --ochre: #D9C36C;
+  --terracotta: #C07949;
+  --accent-soft: #4A2B28;
+  --ochre-soft: #4D452B;
+  --paper: #2E2522;
+  --shadow-color: 0, 0, 0;
+  --glow-accent: rgba(178, 88, 82, .2);
+  --glow-ochre: rgba(217, 195, 108, .18);
+  --placeholder-1: #9B863B;
+  --placeholder-2: #865233;
+  --placeholder-3: #4A554A;
 }
 
 * {
