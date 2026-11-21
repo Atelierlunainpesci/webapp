@@ -1,3 +1,2 @@
-// Le foto stanno nella cartella "foto": home, commissioni, ritrattini, editoriali.
-// Ogni galleria mostra 1.jpeg, 2.jpeg, 3.jpeg... fino a "massimo" foto. Qui puoi alzare il limite.
+// Gallery settings: photos are read from foto/{section}/1.jpeg through the configured maximum.
 window.GALLERIE = { massimo: 12 };

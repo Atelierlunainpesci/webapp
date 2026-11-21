@@ -76,49 +76,299 @@
             border-radius: 6px;
             vertical-align: middle
         }
+
+        .home-return {
+            display: inline-block;
+            margin-bottom: 16px;
+            padding: 10px 16px;
+            border-radius: 99px;
+            background: var(--paper);
+            color: var(--ink);
+            font-weight: 700;
+            text-decoration: none
+        }
     </style>
 </head>
 
 <body>
+    <a class="home-return" href="../index.html" data-i18n="common.backHome"></a>
     <h1 data-i18n="driveTest.title"></h1>
     <p data-i18n="driveTest.intro"></p>
     <ol id="log"></ol>
     <script src="../assets/js/i18n.js"></script>
     <script src="../assets/js/config.js"></script>
     <script>
-        const log = (ok, t, d = '') => { const li = document.createElement('li'); li.className = ok ? 'ok' : 'ko'; li.innerHTML = (ok ? '✓ ' : '✗ ') + t + (d ? `<small>${d}</small>` : ''); document.getElementById('log').append(li); return li };
-        const C = (window.SITO || {}).drive || {};
-        const api = async (q, campi = 'files(id,name,mimeType)') => { const r = await fetch(`https://www.googleapis.com/drive/v3/files?q=${encodeURIComponent(q)}&fields=${encodeURIComponent(campi)}&pageSize=200&key=${C.apiKey}`, { referrerPolicy: 'no-referrer-when-downgrade' }); const j = await r.json().catch(() => ({})); if (!r.ok) { const e = new Error(j.error && j.error.message || I18N.t('driveTest.httpStatus', { status: r.status })); e.status = r.status; e.reason = (j.error && j.error.errors && j.error.errors[0] && j.error.errors[0].reason) || ''; throw e } return j.files || [] };
-        const aiuto = e => {
-            const m = (e.message + ' ' + e.reason).toLowerCase();
-            if (m.includes('referer')) return I18N.t('driveTest.refererHelp', { origin: location.origin });
-            if (m.includes('api key not valid') || m.includes('keyinvalid')) return I18N.t('driveTest.invalidKeyHelp');
-            if (m.includes('has not been used') || m.includes('disabled') || m.includes('accessnotconfigured')) return I18N.t('driveTest.apiDisabledHelp');
-            if (m.includes('not found') || e.status === 404) return I18N.t('driveTest.folderHelp');
-            if (m.includes('blocked') || m.includes('restricted')) return I18N.t('driveTest.restrictedHelp');
-            return I18N.t('driveTest.unknownError')
+        const driveConfiguration = (window.SITO || {}).drive || {};
+
+        // Append a success or failure entry to the Drive diagnostic log.
+        const appendLog = (success, title, details = '') => {
+            const listItem = document.createElement('li');
+            listItem.className = success ? 'ok' : 'ko';
+            listItem.innerHTML =
+                (success ? '✓ ' : '✗ ') +
+                title +
+                (details ? `<small>${details}</small>` : '');
+            document.getElementById('log').append(listItem);
+            return listItem;
         };
-        (async () => {
-            log(true, I18N.t('driveTest.address'), location.origin);
-            if (!C.apiKey) { log(false, I18N.t('driveTest.noKey'), I18N.t('driveTest.noKeyDetails')); return }
-            log(true, I18N.t('driveTest.keyPresent'), C.apiKey.slice(0, 6) + I18N.t('driveTest.folderValue', { folder: C.cartella }));
-            let sub;
-            try { sub = await api(`'${C.cartella}' in parents and trashed=false`); log(true, I18N.t('driveTest.folderReachable'), sub.length ? sub.map(x => x.name + (x.mimeType.endsWith('folder') ? '/' : '')).join(', ') : I18N.t('driveTest.unknownFolder')) }
-            catch (e) { log(false, I18N.t('driveTest.cannotRead'), `${e.message}<br><b>${aiuto(e)}</b>`); return }
-            const norm = s => s.trim().toLowerCase(), fold = x => x.mimeType === 'application/vnd.google-apps.folder';
-            const foto = sub.find(x => fold(x) && norm(x.name) === 'foto'); log(!!foto, foto ? I18N.t('driveTest.folderFound') : I18N.t('driveTest.folderMissing'), I18N.t('driveTest.subfoldersTip'));
-            let liv = foto ? await api(`'${foto.id}' in parents and trashed=false`) : sub; liv = liv.filter(fold);
-            let primo = null;
-            for (const nome of ['home', 'commissioni', 'ritrattini', 'editoriali']) {
-                const c = liv.find(x => norm(x.name) === nome || norm(x.name).startsWith(nome)); if (!c) { log(false, I18N.t('driveTest.folderNotFound', { name: nome }), I18N.t('driveTest.foldersFound', { names: liv.map(x => x.name).join(', ') || I18N.t('driveTest.noneFound') })); continue }
-                const f = await api(`'${c.id}' in parents and trashed=false`, 'files(id,name,mimeType,thumbnailLink)'); const im = f.filter(x => x.mimeType && x.mimeType.startsWith('image/')), altri = f.filter(x => !im.includes(x));
-                log(im.length > 0, I18N.t('driveTest.usablePhotos', { name: nome, count: im.length }), (im.slice(0, 4).map(x => x.name).join(', ') || '') + (altri.length ? I18N.t('driveTest.unusablePhotos', { files: altri.map(x => x.name + ' [' + x.mimeType + ']').join(', ') }) : ''));
-                if (!primo && im[0]) primo = im[0];
+
+        // Fetch a Drive query and return its files or a descriptive error.
+        const fetchDriveTestFiles = async (
+            query,
+            fields = 'files(id,name,mimeType)',
+        ) => {
+            const driveResponse = await fetch(
+                `https://www.googleapis.com/drive/v3/files?q=${encodeURIComponent(query)}&fields=${encodeURIComponent(fields)}&pageSize=200&key=${driveConfiguration.apiKey}`,
+                { referrerPolicy: 'no-referrer-when-downgrade' },
+            );
+            const driveData = await driveResponse.json().catch(() => ({}));
+
+            if (!driveResponse.ok) {
+                const driveError = new Error(
+                    driveData.error?.message ||
+                    I18N.t('driveTest.httpStatus', { status: driveResponse.status }),
+                );
+                driveError.status = driveResponse.status;
+                driveError.reason =
+                    driveData.error?.errors?.[0]?.reason || '';
+                throw driveError;
             }
-            if (!primo) { log(false, I18N.t('driveTest.noPhotos')); return }
-            const prove = [[I18N.t('driveTest.thumbnailApi'), primo.thumbnailLink && primo.thumbnailLink.replace(/=s\d+.*$/, '=w400')], [I18N.t('driveTest.googleusercontent'), `https://lh3.googleusercontent.com/d/${primo.id}=w400`], [I18N.t('driveTest.driveThumbnail'), `https://drive.google.com/thumbnail?id=${primo.id}&sz=w400`]];
-            for (const [n, u] of prove) { if (!u) continue; const li = log(false, I18N.t('driveTest.loadingImage', { name: primo.name, method: n }), I18N.t('driveTest.inProgress')); await new Promise(ok => { const i = new Image(); i.referrerPolicy = 'no-referrer'; i.onload = () => { li.className = 'ok'; li.firstChild.textContent = '✓ '; li.querySelector('small').innerHTML = I18N.t('driveTest.works'); li.append(i); ok() }; i.onerror = () => { li.querySelector('small').textContent = I18N.t('driveTest.imageFailed'); ok() }; i.src = u }) }
-        })().catch(e => log(false, I18N.t('driveTest.unexpected'), e.message));
+
+            return driveData.files || [];
+        };
+
+        // Convert a Drive API error into a useful setup hint.
+        const getDriveErrorHint = error => {
+            const errorText =
+                `${error.message} ${error.reason}`.toLowerCase();
+
+            if (errorText.includes('referer')) {
+                return I18N.t('driveTest.refererHelp', { origin: location.origin });
+            }
+            if (errorText.includes('api key not valid') || errorText.includes('keyinvalid')) {
+                return I18N.t('driveTest.invalidKeyHelp');
+            }
+            if (
+                errorText.includes('has not been used') ||
+                errorText.includes('disabled') ||
+                errorText.includes('accessnotconfigured')
+            ) {
+                return I18N.t('driveTest.apiDisabledHelp');
+            }
+            if (errorText.includes('not found') || error.status === 404) {
+                return I18N.t('driveTest.folderHelp');
+            }
+            if (errorText.includes('blocked') || errorText.includes('restricted')) {
+                return I18N.t('driveTest.restrictedHelp');
+            }
+            return I18N.t('driveTest.unknownError');
+        };
+
+        // Normalize a folder name and recognize Google Drive folder MIME types.
+        const normalizeFolderName = name => name.trim().toLowerCase();
+        const isFolder = file =>
+            file.mimeType === 'application/vnd.google-apps.folder';
+
+        // Run the complete Drive configuration diagnostic.
+        const runDriveTest = async () => {
+            appendLog(true, I18N.t('driveTest.address'), location.origin);
+
+            if (!driveConfiguration.apiKey) {
+                appendLog(
+                    false,
+                    I18N.t('driveTest.noKey'),
+                    I18N.t('driveTest.noKeyDetails'),
+                );
+                return;
+            }
+
+            appendLog(
+                true,
+                I18N.t('driveTest.keyPresent'),
+                driveConfiguration.apiKey.slice(0, 6) +
+                    I18N.t('driveTest.folderValue', {
+                        folder: driveConfiguration.cartella,
+                    }),
+            );
+
+            let rootFiles;
+            try {
+                rootFiles = await fetchDriveTestFiles(
+                    `'${driveConfiguration.cartella}' in parents and trashed=false`,
+                );
+                appendLog(
+                    true,
+                    I18N.t('driveTest.folderReachable'),
+                    rootFiles.length
+                        ? rootFiles
+                            .map(file =>
+                                file.name +
+                                (file.mimeType.endsWith('folder') ? '/' : ''),
+                            )
+                            .join(', ')
+                        : I18N.t('driveTest.unknownFolder'),
+                );
+            } catch (error) {
+                appendLog(
+                    false,
+                    I18N.t('driveTest.cannotRead'),
+                    `${error.message}<br><b>${getDriveErrorHint(error)}</b>`,
+                );
+                return;
+            }
+
+            const photoFolder = rootFiles.find(
+                file =>
+                    isFolder(file) &&
+                    normalizeFolderName(file.name) === 'foto',
+            );
+            appendLog(
+                !!photoFolder,
+                photoFolder
+                    ? I18N.t('driveTest.folderFound')
+                    : I18N.t('driveTest.folderMissing'),
+                I18N.t('driveTest.subfoldersTip'),
+            );
+
+            let sectionFolders = photoFolder
+                ? await fetchDriveTestFiles(
+                    `'${photoFolder.id}' in parents and trashed=false`,
+                )
+                : rootFiles;
+            sectionFolders = sectionFolders.filter(isFolder);
+            let firstPhoto = null;
+
+            for (const sectionName of [
+                'home',
+                'commissioni',
+                'ritrattini',
+                'editoriali',
+            ]) {
+                const sectionFolder = sectionFolders.find(
+                    file =>
+                        normalizeFolderName(file.name) === sectionName ||
+                        normalizeFolderName(file.name).startsWith(sectionName),
+                );
+
+                if (!sectionFolder) {
+                    appendLog(
+                        false,
+                        I18N.t('driveTest.folderNotFound', {
+                            name: sectionName,
+                        }),
+                        I18N.t('driveTest.foldersFound', {
+                            names:
+                                sectionFolders
+                                    .map(file => file.name)
+                                    .join(', ') ||
+                                I18N.t('driveTest.noneFound'),
+                        }),
+                    );
+                    continue;
+                }
+
+                const sectionFiles = await fetchDriveTestFiles(
+                    `'${sectionFolder.id}' in parents and trashed=false`,
+                    'files(id,name,mimeType,thumbnailLink)',
+                );
+                const images = sectionFiles.filter(
+                    file =>
+                        file.mimeType &&
+                        file.mimeType.startsWith('image/'),
+                );
+                const otherFiles = sectionFiles.filter(
+                    file => !images.includes(file),
+                );
+
+                appendLog(
+                    images.length > 0,
+                    I18N.t('driveTest.usablePhotos', {
+                        name: sectionName,
+                        count: images.length,
+                    }),
+                    (images
+                        .slice(0, 4)
+                        .map(file => file.name)
+                        .join(', ') || '') +
+                        (otherFiles.length
+                            ? I18N.t('driveTest.unusablePhotos', {
+                                files: otherFiles
+                                    .map(
+                                        file =>
+                                            file.name +
+                                            ' [' +
+                                            file.mimeType +
+                                            ']',
+                                    )
+                                    .join(', '),
+                            })
+                            : ''),
+                );
+
+                if (!firstPhoto && images[0]) firstPhoto = images[0];
+            }
+
+            if (!firstPhoto) {
+                appendLog(false, I18N.t('driveTest.noPhotos'));
+                return;
+            }
+
+            const imageTests = [
+                [
+                    I18N.t('driveTest.thumbnailApi'),
+                    firstPhoto.thumbnailLink &&
+                        firstPhoto.thumbnailLink.replace(/=s\d+.*$/, '=w400'),
+                ],
+                [
+                    I18N.t('driveTest.googleusercontent'),
+                    `https://lh3.googleusercontent.com/d/${firstPhoto.id}=w400`,
+                ],
+                [
+                    I18N.t('driveTest.driveThumbnail'),
+                    `https://drive.google.com/thumbnail?id=${firstPhoto.id}&sz=w400`,
+                ],
+            ];
+
+            for (const [testName, imageUrl] of imageTests) {
+                if (!imageUrl) continue;
+
+                const listItem = appendLog(
+                    false,
+                    I18N.t('driveTest.loadingImage', {
+                        name: firstPhoto.name,
+                        method: testName,
+                    }),
+                    I18N.t('driveTest.inProgress'),
+                );
+
+                await new Promise(resolve => {
+                    const testImage = new Image();
+                    testImage.referrerPolicy = 'no-referrer';
+                    testImage.onload = () => {
+                        listItem.className = 'ok';
+                        listItem.firstChild.textContent = '✓ ';
+                        listItem.querySelector('small').innerHTML =
+                            I18N.t('driveTest.works');
+                        listItem.append(testImage);
+                        resolve();
+                    };
+                    testImage.onerror = () => {
+                        listItem.querySelector('small').textContent =
+                            I18N.t('driveTest.imageFailed');
+                        resolve();
+                    };
+                    testImage.src = imageUrl;
+                });
+            }
+        };
+
+        runDriveTest().catch(error =>
+            appendLog(
+                false,
+                I18N.t('driveTest.unexpected'),
+                error.message,
+            ),
+        );
     </script>
 </body>
 

@@ -38,26 +38,74 @@
   </header>
   <nav id="menu" class="menu" hidden data-i18n-attr="aria-label:common.mainMenu">
     <a href="../index.html" data-i18n="common.home"></a>
-    <a href="servizi.html" aria-current="page" data-i18n="common.services"></a><a href="lavora-con-me.html" data-i18n="common.workWithMe"></a><a
+    <a href="servizi.html" aria-current="page" data-i18n="common.services"></a><a
       href="contatti.html" data-i18n="common.contact"></a><a href="installa.html" data-i18n="common.install"></a>
   </nav>
   <main id="main">
-    <!-- DESCRIZIONI DI PROVA: sostituisci con i tuoi testi -->
+    <a class="btn alt home-return" href="../index.html" data-i18n="common.backHome"></a>
     <h1 data-i18n="services.heading"></h1>
     <p class="lead" data-i18n="services.intro"></p>
     <div class="servizi">
-      <a class="servizio" href="commissioni.html">
-        <h2 data-i18n="commissions.heading"></h2>
-        <p data-i18n="services.commissions.description"></p><span
-          class="vai" data-i18n="common.more"></span>
-      </a><a class="servizio" href="ritrattini-a-portar-via.html">
-        <h2 data-i18n="portraits.heading"></h2>
-        <p class="sottotitolo" data-i18n="portraits.subtitle"></p>
-        <p data-i18n="services.portraits.description"></p><span class="vai" data-i18n="common.more"></span>
-      </a><a class="servizio" href="progetti-editoriali.html">
-        <h2 data-i18n="editorial.heading"></h2>
-        <p data-i18n="services.editorial.description"></p><span class="vai" data-i18n="common.more"></span>
-      </a>
+      <details class="servizio">
+        <summary>
+          <h2 data-i18n="commissions.heading"></h2>
+          <p data-i18n="services.commissions.description"></p>
+        </summary>
+        <div class="servizio-contenuto">
+          <p class="lead" data-i18n="commissions.intro"></p>
+          <h3 data-i18n="commissions.prices"></h3>
+          <table class="prezzi">
+            <caption class="sr" data-i18n="commissions.priceCaption"></caption>
+            <thead>
+              <tr>
+                <th scope="col" data-i18n="commissions.format"></th>
+                <th scope="col" data-i18n="commissions.price"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td data-i18n="commissions.portraitA5"></td>
+                <td data-i18n="commissions.priceFrom"></td>
+              </tr>
+              <tr>
+                <td data-i18n="commissions.portraitA4"></td>
+                <td data-i18n="commissions.priceFrom"></td>
+              </tr>
+              <tr>
+                <td data-i18n="commissions.portraitA3"></td>
+                <td data-i18n="commissions.priceFrom"></td>
+              </tr>
+              <tr>
+                <td data-i18n="commissions.customIllustration"></td>
+                <td data-i18n="commissions.priceFrom"></td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="nota" data-i18n="commissions.priceNote"></p>
+          <h3 data-i18n="common.gallery"></h3>
+          <div class="galleria" data-galleria="commissioni"></div>
+          <p class="azioni"><a class="btn" data-i18n-attr="data-wa:commissions.talkMessage"
+              href="contatti.html" data-i18n="common.talk"></a></p>
+        </div>
+      </details>
+      <details class="servizio">
+        <summary>
+          <h2 data-i18n="portraits.heading"></h2>
+          <p class="sottotitolo" data-i18n="portraits.subtitle"></p>
+        </summary>
+        <div class="servizio-contenuto">
+          <h3 data-i18n="portraits.eventType"></h3>
+          <ul class="eventi">
+            <li><strong data-i18n="portraits.wedding"></strong></li>
+            <li><strong data-i18n="portraits.birthday"></strong></li>
+            <li><strong data-i18n="portraits.privateEvent"></strong></li>
+          </ul>
+          <p class="azioni"><a class="btn" data-i18n-attr="data-wa:portraits.talkMessage"
+              href="contatti.html" data-i18n="portraits.book"></a></p>
+          <h3 data-i18n="common.gallery"></h3>
+          <div class="galleria" data-galleria="ritrattini"></div>
+        </div>
+      </details>
     </div>
   </main>
   <footer data-i18n="common.footer"></footer>

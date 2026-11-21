@@ -7,8 +7,8 @@ const translations = {
     'common.menuButton': 'Menu',
     'common.mainMenu': 'Menu principale',
     'common.home': 'Home',
+    'common.backHome': 'Torna alla home',
     'common.services': 'Servizi',
-    'common.workWithMe': 'Lavora con me',
     'common.contact': 'Contatti',
     'common.instagram': 'Instagram',
     'common.whatsapp': 'WhatsApp',
@@ -16,38 +16,26 @@ const translations = {
     'common.android': 'Android',
     'common.install': "Installa l'app",
     'common.footer': '© 2026 Atelier Luna in Pesci',
-    'common.backServices': '← Tutti i servizi',
     'common.talk': 'Parliamone',
     'common.gallery': 'Galleria',
-    'common.more': 'Scopri di più →',
     'page.home.title': 'Atelier Luna in Pesci · Chi sono',
-    'page.home.description': 'Atelier Luna in Pesci: ritratti, illustrazioni, live sketching per eventi e matrimoni e progetti editoriali. Scopri chi sono.',
+    'page.home.description': 'Atelier Luna in Pesci: ritratti, illustrazioni e live sketching per eventi e matrimoni. Scopri chi sono.',
     'page.services.title': 'Servizi · Atelier Luna in Pesci',
-    'page.services.description': 'Commissioni, ritrattini a portar via (live sketching per eventi e matrimoni) e progetti editoriali.',
-    'page.commissions.title': 'Commissioni · Atelier Luna in Pesci',
-    'page.commissions.description': 'Opere su misura: ritratti, illustrazioni e dipinti da regalare o da tenere. Scopri come funziona, i prezzi e la galleria.',
+    'page.services.description': 'Commissioni e ritrattini a portar via: scopri i servizi di Atelier Luna in Pesci.',
     'page.contact.title': 'Contattami · Atelier Luna in Pesci',
     'page.contact.description': 'Contattami su Instagram, WhatsApp o via email: atelierlunainpesci@gmail.com.',
     'page.install.title': "Installa l'app · Atelier Luna in Pesci",
     'page.install.description': "Come aggiungere Atelier Luna in Pesci alla schermata home del telefono (iPhone e Android) e aprirlo come un'app.",
-    'page.work.title': 'Lavora con me · Atelier Luna in Pesci',
-    'page.work.description': 'Hai una proposta di collaborazione? Scrivimi e ti ricontatterò al più presto.',
-    'page.editorial.title': 'Progetti editoriali · Atelier Luna in Pesci',
-    'page.editorial.description': 'Illustrazioni per libri, riviste, copertine e progetti di autori e case editrici. Guarda alcuni lavori e scrivimi.',
-    'page.portraits.title': 'Ritrattini a portar via · Atelier Luna in Pesci',
-    'page.portraits.description': 'Live sketching per eventi e matrimoni: ritratti dal vivo che gli ospiti portano a casa come ricordo. Prenota per il tuo evento.',
-    'schema.description': 'Commissioni, ritrattini live per eventi e matrimoni, progetti editoriali.',
+    'schema.description': 'Commissioni, ritrattini dal vivo per eventi e matrimoni.',
     'home.heading': 'Chi sono',
     'home.photoAlt': "Ritratto dell'artista che sorride mentre dipinge",
     'home.paragraph1': "Ciao, sono l'artista di Atelier Luna in Pesci. Dipingo ritratti, illustrazioni e piccoli mondi pieni di colore, tra acquerello e matita.",
     'home.paragraph2': 'Mi piace raccontare le persone attraverso i loro dettagli: un sorriso, uno sguardo, un gesto. Qui trovi i miei lavori e i modi per lavorare insieme.',
     'home.servicesCta': 'Scopri i servizi',
-    'home.contactCta': 'Scrivimi',
+    'home.contactCta': 'Contattami',
     'services.heading': 'Servizi',
-    'services.intro': "Tre modi per portare un po' d'arte nella tua vita.",
+    'services.intro': "Due modi per portare un po' d'arte nella tua vita.",
     'services.commissions.description': 'Opere create su misura per te: ritratti, illustrazioni e dipinti da regalare o da tenere.',
-    'services.portraits.description': 'Un ritratto veloce, fatto dal vivo, che gli ospiti portano a casa come ricordo.',
-    'services.editorial.description': 'Illustrazioni per libri, riviste, copertine e progetti di autori e case editrici.',
     'commissions.heading': 'Commissioni',
     'commissions.intro': "Ogni commissione nasce da una conversazione: mi racconti per chi è, cosa vuoi esprimere e in che stile lo immagini. Ti propongo uno schizzo e poi realizzo l'opera. Tempi e consegna si definiscono insieme.",
     'commissions.prices': 'Prezzi',
@@ -77,30 +65,24 @@ const translations = {
     'install.android.step4': "Conferma. Da ora apri l'atelier dall'icona.",
     'install.oneTap': 'Installa con un tap',
     'install.note': 'Dal computer non serve: apri il sito dal telefono per aggiungerlo alla home.',
-    'work.heading': 'Lavora con me',
-    'work.intro': 'Hai una proposta di collaborazione? Scrivimi e ti ricontatterò al più presto!',
-    'work.email': 'Scrivimi via email',
-    'work.whatsapp': 'Scrivimi su WhatsApp',
-    'work.emailSubject': 'Proposta di collaborazione',
-    'work.whatsappMessage': 'Ciao! Ho una proposta di collaborazione.',
-    'editorial.heading': 'Progetti editoriali',
-    'editorial.intro': 'Illustro libri, riviste, copertine e progetti per autori e case editrici. Lavoro a stretto contatto con chi scrive per dare un volto alle storie, dal primo schizzo alla tavola finale.',
-    'editorial.someWorks': 'Alcuni lavori',
-    'editorial.whatsappMessage': 'Ciao! Vorrei parlarti di un progetto editoriale.',
+    'portfolio.heading': 'I miei lavori',
+    'portfolio.intro': 'Una selezione di lavori e momenti dal vivo, tra ritratti, illustrazioni e incontri.',
+    'portfolio.commissionsHeading': 'Commissioni',
+    'portfolio.commissionsDescription': 'Ritratti e illustrazioni realizzati su misura.',
+    'portfolio.portraitsHeading': 'Ritrattini dal vivo',
+    'portfolio.portraitsDescription': 'Alcuni ritrattini realizzati durante eventi.',
+    'portfolio.illustrationsHeading': 'Illustrazioni',
+    'portfolio.illustrationsDescription': 'Una selezione di illustrazioni.',
+    'portfolio.commissionCaption': 'Lavoro su commissione · esempio {number}',
+    'portfolio.portraitCaption': 'Ritrattino dal vivo · esempio {number}',
+    'portfolio.illustrationCaption': 'Illustrazione · esempio {number}',
     'portraits.heading': 'Ritrattini a portar via',
     'portraits.subtitle': 'Live sketching per eventi e matrimoni',
-    'portraits.intro': 'Durante il tuo evento realizzo ritratti veloci dal vivo: ogni ospite si siede, io disegno, e lui torna a casa con un ricordo unico. Ci vogliono pochi minuti a persona.',
     'portraits.eventType': 'Per quale evento?',
     'portraits.wedding': 'Matrimonio',
-    'portraits.weddingDescription': 'Un ricordo disegnato per ogni invitato.',
-    'portraits.weddingMessage': 'Ciao! Vorrei prenotare i ritrattini live per un matrimonio.',
     'portraits.birthday': 'Compleanno',
-    'portraits.birthdayDescription': 'Per festeggiare con qualcosa di speciale.',
-    'portraits.birthdayMessage': 'Ciao! Vorrei prenotare i ritrattini live per un compleanno.',
     'portraits.privateEvent': 'Evento privato',
-    'portraits.privateEventDescription': 'Feste, cene, inaugurazioni e serate tra amici.',
-    'portraits.privateEventMessage': 'Ciao! Vorrei prenotare i ritrattini live per un evento privato.',
-    'portraits.book': 'Prenota',
+    'portraits.book': 'Contattami',
     'portraits.talkMessage': 'Ciao! Vorrei informazioni sui ritrattini a portar via.',
     'gallery.work': 'Opera {number}',
     'driveTest.title': 'Test collegamento Drive',
@@ -148,8 +130,8 @@ const translations = {
     'common.menuButton': 'Menu',
     'common.mainMenu': 'Main menu',
     'common.home': 'Home',
+    'common.backHome': 'Back to home',
     'common.services': 'Services',
-    'common.workWithMe': 'Work with me',
     'common.contact': 'Contact',
     'common.instagram': 'Instagram',
     'common.whatsapp': 'WhatsApp',
@@ -157,38 +139,26 @@ const translations = {
     'common.android': 'Android',
     'common.install': 'Install the app',
     'common.footer': '© 2026 Atelier Luna in Pesci',
-    'common.backServices': '← All services',
     'common.talk': "Let's talk",
     'common.gallery': 'Gallery',
-    'common.more': 'Discover more →',
     'page.home.title': 'Atelier Luna in Pesci · About me',
-    'page.home.description': 'Atelier Luna in Pesci: portraits, illustrations, live sketching for events and weddings, and editorial projects. Find out more about me.',
+    'page.home.description': 'Atelier Luna in Pesci: portraits, illustrations and live sketching for events and weddings. Find out more about me.',
     'page.services.title': 'Services · Atelier Luna in Pesci',
-    'page.services.description': 'Commissions, live portraits to take home (live sketching for events and weddings), and editorial projects.',
-    'page.commissions.title': 'Commissions · Atelier Luna in Pesci',
-    'page.commissions.description': 'Custom-made artwork: portraits, illustrations and paintings to give as gifts or keep. Find out how it works, see the prices and browse the gallery.',
+    'page.services.description': 'Commissions and live portraits to take home: explore Atelier Luna in Pesci services.',
     'page.contact.title': 'Contact · Atelier Luna in Pesci',
     'page.contact.description': 'Contact me on Instagram, WhatsApp or by email: atelierlunainpesci@gmail.com.',
     'page.install.title': 'Install the app · Atelier Luna in Pesci',
     'page.install.description': 'How to add Atelier Luna in Pesci to your phone home screen (iPhone and Android) and open it like an app.',
-    'page.work.title': 'Work with me · Atelier Luna in Pesci',
-    'page.work.description': 'Have a collaboration idea? Get in touch and I will get back to you as soon as possible.',
-    'page.editorial.title': 'Editorial projects · Atelier Luna in Pesci',
-    'page.editorial.description': 'Illustrations for books, magazines, covers and projects by authors and publishers. Browse some of my work and get in touch.',
-    'page.portraits.title': 'Live portraits to take home · Atelier Luna in Pesci',
-    'page.portraits.description': 'Live sketching for events and weddings: guests take home a portrait as a keepsake. Book live sketching for your event.',
-    'schema.description': 'Commissions, live portraits for events and weddings, and editorial projects.',
+    'schema.description': 'Commissions and live portraits for events and weddings.',
     'home.heading': 'About me',
     'home.photoAlt': 'Portrait of the artist smiling while painting',
     'home.paragraph1': 'Hello, I am the artist behind Atelier Luna in Pesci. I paint portraits, illustrations and little worlds full of colour, using watercolour and pencil.',
     'home.paragraph2': 'I love telling people’s stories through the details: a smile, a glance, a gesture. Here you can see my work and find ways to work together.',
     'home.servicesCta': 'Explore my services',
-    'home.contactCta': 'Get in touch',
+    'home.contactCta': 'Contact me',
     'services.heading': 'Services',
-    'services.intro': 'Three ways to bring a little art into your life.',
+    'services.intro': 'Two ways to bring a little art into your life.',
     'services.commissions.description': 'Artwork made just for you: portraits, illustrations and paintings to give as gifts or keep.',
-    'services.portraits.description': 'A quick, live portrait that guests can take home as a keepsake.',
-    'services.editorial.description': 'Illustrations for books, magazines, covers and projects by authors and publishers.',
     'commissions.heading': 'Commissions',
     'commissions.intro': 'Every commission begins with a conversation: tell me who it is for, what you would like to express and how you picture the style. I will suggest a sketch and then create the artwork. We will agree on the timeline and delivery together.',
     'commissions.prices': 'Prices',
@@ -218,30 +188,24 @@ const translations = {
     'install.android.step4': 'Confirm. You can now open the atelier from its icon.',
     'install.oneTap': 'Install in one tap',
     'install.note': 'You do not need this on a computer: open the website on your phone to add it to your home screen.',
-    'work.heading': 'Work with me',
-    'work.intro': 'Have a collaboration idea? Get in touch and I will get back to you as soon as possible!',
-    'work.email': 'Email me',
-    'work.whatsapp': 'Message me on WhatsApp',
-    'work.emailSubject': 'Collaboration proposal',
-    'work.whatsappMessage': 'Hello! I have a collaboration idea.',
-    'editorial.heading': 'Editorial projects',
-    'editorial.intro': 'I illustrate books, magazines, covers and projects for authors and publishers. I work closely with writers to bring their stories to life, from the first sketch to the finished artwork.',
-    'editorial.someWorks': 'Selected work',
-    'editorial.whatsappMessage': 'Hello! I would like to talk to you about an editorial project.',
+    'portfolio.heading': 'My work',
+    'portfolio.intro': 'A selection of work and live moments, from portraits and illustrations to events.',
+    'portfolio.commissionsHeading': 'Commissions',
+    'portfolio.commissionsDescription': 'Custom-made portraits and illustrations.',
+    'portfolio.portraitsHeading': 'Live portraits',
+    'portfolio.portraitsDescription': 'A few portraits drawn during events.',
+    'portfolio.illustrationsHeading': 'Illustrations',
+    'portfolio.illustrationsDescription': 'A selection of illustrations.',
+    'portfolio.commissionCaption': 'Commissioned artwork · example {number}',
+    'portfolio.portraitCaption': 'Live portrait · example {number}',
+    'portfolio.illustrationCaption': 'Illustration · example {number}',
     'portraits.heading': 'Live portraits to take home',
     'portraits.subtitle': 'Live sketching for events and weddings',
-    'portraits.intro': 'At your event, I create quick live portraits: each guest takes a seat, I draw, and they go home with a one-of-a-kind keepsake. It only takes a few minutes per person.',
     'portraits.eventType': 'What is the occasion?',
     'portraits.wedding': 'Wedding',
-    'portraits.weddingDescription': 'A hand-drawn keepsake for every guest.',
-    'portraits.weddingMessage': 'Hello! I would like to book live portraits for a wedding.',
     'portraits.birthday': 'Birthday',
-    'portraits.birthdayDescription': 'Celebrate with something special.',
-    'portraits.birthdayMessage': 'Hello! I would like to book live portraits for a birthday.',
     'portraits.privateEvent': 'Private event',
-    'portraits.privateEventDescription': 'Parties, dinners, openings and evenings with friends.',
-    'portraits.privateEventMessage': 'Hello! I would like to book live portraits for a private event.',
-    'portraits.book': 'Book now',
+    'portraits.book': 'Contact me',
     'portraits.talkMessage': 'Hello! I would like more information about live portraits to take home.',
     'gallery.work': 'Artwork {number}',
     'driveTest.title': 'Drive connection test',
@@ -286,7 +250,9 @@ const translations = {
 const browserLanguage = (navigator.language || (navigator.languages && navigator.languages[0]) || 'it').toLowerCase();
 const locale = browserLanguage.startsWith('it') ? 'it' : 'en';
 const messages = translations[locale];
-const t = (key, values = {}) => {
+
+// Translate a key and replace its named placeholder values.
+const translate = (key, values = {}) => {
   let message = messages[key];
   if (message === undefined) {
     console.warn(`[i18n] Missing ${locale} translation: ${key}`);
@@ -299,18 +265,24 @@ const t = (key, values = {}) => {
 };
 
 document.documentElement.lang = locale;
+
+// Apply translated text to elements with the i18n text attribute.
 document.querySelectorAll('[data-i18n]').forEach(element => {
   const key = element.dataset.i18n;
-  element.textContent = t(key);
+  element.textContent = translate(key);
 });
+
+// Apply translated HTML to elements with the i18n-html attribute.
 document.querySelectorAll('[data-i18n-html]').forEach(element => {
   const key = element.dataset.i18nHtml;
-  element.innerHTML = t(key);
+  element.innerHTML = translate(key);
 });
+
+// Apply translated values to attributes declared by i18n-attr.
 document.querySelectorAll('[data-i18n-attr]').forEach(element => {
   element.dataset.i18nAttr.split(',').forEach(pair => {
     const [attribute, key] = pair.split(':');
-    element.setAttribute(attribute, t(key));
+    element.setAttribute(attribute, translate(key));
   });
 });
 const ogLocale = document.querySelector('meta[property="og:locale"]');
@@ -318,8 +290,8 @@ if (ogLocale) ogLocale.content = locale === 'it' ? 'it_IT' : 'en_US';
 const structuredData = document.querySelector('script[type="application/ld+json"]');
 if (structuredData) {
   const data = JSON.parse(structuredData.textContent);
-  data.name = t('common.brandName');
-  data.description = t('schema.description');
+  data.name = translate('common.brandName');
+  data.description = translate('schema.description');
   structuredData.textContent = JSON.stringify(data);
 }
 const manifest = document.querySelector('link[rel="manifest"]');
@@ -328,4 +300,4 @@ if (manifest && locale === 'en') {
   manifestUrl.pathname = manifestUrl.pathname.replace(/manifest\.webmanifest$/, 'manifest.en.webmanifest');
   manifest.href = manifestUrl.href;
 }
-window.I18N = { locale, t };
+window.I18N = { locale, t: translate };
