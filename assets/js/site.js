@@ -1,95 +1,427 @@
-const $ = s => document.querySelector(s), C = window.SITO || {};
-const ROOT = new URL('../../', document.currentScript.src);
-document.querySelectorAll('[data-ig]').forEach(a => { a.href = C.instagram; a.target = '_blank'; a.rel = 'noopener'; });
-document.querySelectorAll('[data-wa]').forEach(a => { a.href = `https://wa.me/${C.whatsapp}?text=${encodeURIComponent(a.dataset.wa)}`; a.target = '_blank'; a.rel = 'noopener'; });
-document.querySelectorAll('[data-mail]').forEach(a => { a.href = `mailto:${C.email}?subject=${encodeURIComponent(a.dataset.mail)}`; });
-document.querySelectorAll('[data-mail-text]').forEach(a => { a.textContent = C.email; });
+const selectElement = selector => document.querySelector(selector);
+const siteConfiguration = window.SITO || {};
+const siteRoot = new URL('../../', document.currentScript.src);
+const driveConfiguration =
+  siteConfiguration.drive &&
+  siteConfiguration.drive.apiKey &&
+  siteConfiguration.drive.cartella
+    ? siteConfiguration.drive
+    : null;
 
-// ---- Foto: da Google Drive (se in assets/js/config.js c'è la chiave API) oppure dalla cartella foto/ del sito ----
-const DR = (C.drive && C.drive.apiKey && C.drive.cartella) ? C.drive : null;
-const attesa = (p, ms) => Promise.race([p, new Promise((_, no) => setTimeout(() => no(new Error('timeout')), ms))]);
-async function elenco(q, campi = 'files(id,name)') {
-  const files = [];
+// Apply localized Instagram, WhatsApp, and email links.
+const configureContactLinks = () => {
+  document.querySelectorAll('[data-ig]').forEach(link => {
+    link.href = siteConfiguration.instagram;
+    link.target = '_blank';
+    link.rel = 'noopener';
+  });
+
+  document.querySelectorAll('[data-wa]').forEach(link => {
+    link.href = `https://wa.me/${siteConfiguration.whatsapp}?text=${encodeURIComponent(link.dataset.wa)}`;
+    link.target = '_blank';
+    link.rel = 'noopener';
+  });
+
+  document.querySelectorAll('[data-mail]').forEach(link => {
+    link.href = `mailto:${siteConfiguration.email}?subject=${encodeURIComponent(link.dataset.mail)}`;
+  });
+
+  document.querySelectorAll('[data-mail-text]').forEach(link => {
+    link.textContent = siteConfiguration.email;
+  });
+};
+
+// Reject a pending operation after the requested timeout.
+const withTimeout = (promise, timeoutMilliseconds) =>
+  Promise.race([
+    promise,
+    new Promise((resolve, reject) => {
+      setTimeout(() => reject(new Error('timeout')), timeoutMilliseconds);
+    }),
+  ]);
+
+// Fetch every page of Drive files matching a query.
+async function fetchDriveFiles(query, fields = 'files(id,name)') {
+  if (!driveConfiguration) return [];
+
+  const driveFiles = [];
   let pageToken = '';
+
   do {
-    const pagina = new URLSearchParams({ q, fields: `nextPageToken,${campi}`, pageSize: '1000', key: DR.apiKey });
-    if (pageToken) pagina.set('pageToken', pageToken);
-    const r = await attesa(fetch(`https://www.googleapis.com/drive/v3/files?${pagina}`, { referrerPolicy: 'no-referrer-when-downgrade' }), 6000);
-    if (!r.ok) { let m = ''; try { m = (await r.json()).error.message; } catch (e) { } throw new Error(I18N.t('errors.driveRequestFailed', { status: r.status, message: m })); }
-    const dati = await r.json();
-    files.push(...(dati.files || []));
-    pageToken = dati.nextPageToken || '';
+    const queryParameters = new URLSearchParams({
+      q: query,
+      fields: `nextPageToken,${fields}`,
+      pageSize: '1000',
+      key: driveConfiguration.apiKey,
+    });
+
+    if (pageToken) queryParameters.set('pageToken', pageToken);
+
+    // Fetch Drive files with a 6-second timeout.
+    const driveResponse = await withTimeout(
+      fetch(`https://www.googleapis.com/drive/v3/files?${queryParameters}`, {
+        referrerPolicy: 'no-referrer-when-downgrade',
+      }),
+      6000,
+    );
+
+    if (!driveResponse.ok) {
+      let errorMessage = '';
+      try {
+        errorMessage = (await driveResponse.json()).error.message;
+      } catch (error) {
+        console.warn('[Drive] Unable to parse the API error response.', error);
+      }
+
+      throw new Error(
+        I18N.t('errors.driveRequestFailed', {
+          status: driveResponse.status,
+          message: errorMessage,
+        }),
+      );
+    }
+
+    const driveData = await driveResponse.json();
+    driveFiles.push(...(driveData.files || []));
+    pageToken = driveData.nextPageToken || '';
   } while (pageToken);
+
+  return driveFiles;
+}
+
+// Normalize a folder name for reliable matching.
+const normalizeName = name => String(name).trim().toLowerCase();
+
+const galleryAliases = {
+  home: ['home'],
+  commissioni: ['commissioni'],
+  ritrattini: ['ritrattini'],
+  editoriali: ['editoriali', 'progetti editoriali'],
+};
+
+// Fetch all folders directly inside a parent folder.
+const fetchSubfolders = parentFolderId =>
+  fetchDriveFiles(
+    `'${parentFolderId}' in parents and mimeType='application/vnd.google-apps.folder' and trashed=false`,
+  );
+
+// Find a folder by exact name or a case-insensitive name prefix.
+const findFolder = (folderList, possibleNames) =>
+  (
+    folderList.find(folder => possibleNames.includes(normalizeName(folder.name))) ||
+    folderList.find(folder =>
+      possibleNames.some(name => normalizeName(folder.name).startsWith(name)),
+    ) ||
+    {}
+  ).id;
+
+// Fetch and cache Drive photos for a gallery section.
+async function fetchDrivePhotos(sectionName) {
+  const cacheKey = `luna-drive-${sectionName}`;
+  let cachedData = null;
+
+  try {
+    cachedData = JSON.parse(sessionStorage.getItem(cacheKey) || 'null');
+  } catch (error) {
+    console.warn('[Drive] Unable to read the session cache.', error);
+  }
+
+  if (cachedData && Date.now() - cachedData.timestamp < 30000) {
+    return cachedData.files;
+  }
+
+  const subfolders = await fetchSubfolders(driveConfiguration.cartella);
+  const photoRootId =
+    findFolder(subfolders, ['foto']) || driveConfiguration.cartella;
+  const sectionFolderId =
+    photoRootId === driveConfiguration.cartella
+      ? findFolder(subfolders, galleryAliases[sectionName] || [sectionName])
+      : findFolder(
+          await fetchSubfolders(photoRootId),
+          galleryAliases[sectionName] || [sectionName],
+        );
+
+  if (!sectionFolderId) {
+    throw new Error(
+      I18N.t('errors.driveFolderNotFound', { name: sectionName }),
+    );
+  }
+
+  const files = (
+    await fetchDriveFiles(
+      `'${sectionFolderId}' in parents and trashed=false`,
+      'files(id,name,mimeType,thumbnailLink)',
+    )
+  )
+    .filter(file => file.mimeType && file.mimeType.startsWith('image/'))
+    .sort((firstFile, secondFile) =>
+      firstFile.name.localeCompare(secondFile.name, undefined, { numeric: true }),
+    );
+
+  if (files.length) {
+    try {
+      sessionStorage.setItem(
+        cacheKey,
+        JSON.stringify({ timestamp: Date.now(), files }),
+      );
+    } catch (error) {
+      console.warn('[Drive] Unable to write the session cache.', error);
+    }
+  }
+
   return files;
 }
-const norm = s => String(s).trim().toLowerCase();
-const ALIAS = { home: ['home'], commissioni: ['commissioni'], ritrattini: ['ritrattini'], editoriali: ['editoriali', 'progetti editoriali'] };
-const sottocartelle = padre => elenco(`'${padre}' in parents and mimeType='application/vnd.google-apps.folder' and trashed=false`);
-const trova = (lista, nomi) => (lista.find(c => nomi.includes(norm(c.name))) || lista.find(c => nomi.some(n => norm(c.name).startsWith(n))) || {}).id;
-async function fotoDrive(sezione) { // elenco ordinato per nome (1, 2, 10...), in cache 30 secondi
-  const k = 'luna-drive-' + sezione; let c = null;
-  try { c = JSON.parse(sessionStorage.getItem(k) || 'null'); } catch (e) { }
-  if (c && Date.now() - c.t < 30000) return c.f;
-  const sub = await sottocartelle(DR.cartella), radice = trova(sub, ['foto']) || DR.cartella;
-  const id = trova(radice === DR.cartella ? sub : await sottocartelle(radice), ALIAS[sezione] || [sezione]);
-  if (!id) throw new Error(I18N.t('errors.driveFolderNotFound', { name: sezione }));
-  const f = (await elenco(`'${id}' in parents and trashed=false`, 'files(id,name,mimeType,thumbnailLink)'))
-    .filter(x => x.mimeType && x.mimeType.startsWith('image/'))
-    .sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
-  if (f.length) { try { sessionStorage.setItem(k, JSON.stringify({ t: Date.now(), f })); } catch (e) { } }
-  return f;
-}
-const urlDrive = (x, w) => [x.thumbnailLink && x.thumbnailLink.replace(/=s\d+.*$/, `=w${w}`), `https://lh3.googleusercontent.com/d/${x.id}=w${w}`, `https://drive.google.com/thumbnail?id=${x.id}&sz=w${w}`].filter(Boolean);
-function provaImg(im, lista, ko) { let i = 0; im.referrerPolicy = 'no-referrer'; im.onerror = () => { if (++i < lista.length) im.src = lista[i]; else ko(); }; im.src = lista[0]; }
 
-// Foto home: Drive (home/chi-sono.*, altrimenti la prima), poi foto/home/chi-sono.jpeg del sito, poi il segnaposto
-document.querySelectorAll('.foto[data-foto]').forEach(async f => {
-  const box = f.parentElement, locali = ['jpeg', 'jpg', 'png', 'webp', 'JPG', 'JPEG', 'svg'].map(e => new URL(`foto/home/${f.dataset.foto}.${e}`, ROOT).href);
-  let lista = locali;
-  if (DR) { try { const fs = await fotoDrive('home'), x = fs.find(o => o.name.toLowerCase().startsWith(f.dataset.foto)) || fs[0]; if (x) lista = [...urlDrive(x, 1400), ...locali]; } catch (e) { console.warn('[Drive]', e.message); } }
-  f.onload = () => box.classList.add('ok');
-  provaImg(f, lista, () => box.classList.add('ko'));
-});
+// Build all supported image URLs for a Drive file.
+const buildDriveImageUrls = (driveFile, width) => [
+  driveFile.thumbnailLink &&
+    driveFile.thumbnailLink.replace(/=s\d+.*$/, `=w${width}`),
+  `https://lh3.googleusercontent.com/d/${driveFile.id}=w${width}`,
+  `https://drive.google.com/thumbnail?id=${driveFile.id}&sz=w${width}`,
+].filter(Boolean);
 
-// Menu hamburger
-const burger = $('#burger'), menu = $('#menu');
-const chiudi = () => { menu.hidden = true; burger.setAttribute('aria-expanded', 'false'); };
-burger.onclick = e => { e.stopPropagation(); const apri = menu.hidden; menu.hidden = !apri; burger.setAttribute('aria-expanded', String(apri)); };
-document.addEventListener('click', e => { if (!menu.hidden && !menu.contains(e.target)) chiudi(); });
-document.addEventListener('keydown', e => { if (e.key === 'Escape') chiudi(); });
-
-// Gallerie: Drive è la fonte principale quando risponde; le foto locali sono il ripiego in caso di errore.
-const MAX_FOTO = (window.GALLERIE || {}).massimo || 12;
-document.querySelectorAll('[data-galleria]').forEach(async g => {
-  const sez = g.dataset.galleria; let driveDisponibile = false;
-  if (DR) {
-    g.classList.add('carica');
-    try {
-      const fs = (await fotoDrive(sez)).slice(0, MAX_FOTO);
-      driveDisponibile = true;
-      const esiti = await Promise.all(fs.map((x, n) => new Promise(ok => {
-        const im = new Image(); im.alt = I18N.t('gallery.work', { number: n + 1 }); im.decoding = 'async'; im.onload = () => ok(true);
-        provaImg(im, urlDrive(x, 1000), () => { im.remove(); ok(false); }); g.append(im);
-      })));
-      if (!esiti.some(Boolean) && fs.length) console.warn('[Drive] Nessuna anteprima immagine è stata caricata.');
-    } catch (e) { console.warn('[Drive]', e.message); }
-    g.classList.remove('carica');
-  }
-  if (!driveDisponibile) for (let n = 1; n <= MAX_FOTO; n++) {
-    const im = new Image(); im.alt = I18N.t('gallery.work', { number: n }); im.loading = 'lazy'; im.decoding = 'async';
-    im.onerror = () => im.remove(); im.src = new URL(`foto/${sez}/${n}.jpeg`, ROOT).href; g.append(im);
-  }
-});
-
-// Installazione come app
-let dp = null;
-const mobile = /android|iphone|ipad|ipod|mobile/i.test(navigator.userAgent);
-addEventListener('beforeinstallprompt', ev => { ev.preventDefault(); dp = ev; const b = $('#one-tap'); if (b && mobile) b.hidden = false; });
-const uno = $('#one-tap'); if (uno) uno.onclick = async () => { if (dp) { dp.prompt(); await dp.userChoice; uno.hidden = true; } };
-const scheda = t => {
-  document.querySelectorAll('[data-tab]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.tab === t)));
-  document.querySelectorAll('[data-pane]').forEach(p => p.hidden = p.dataset.pane !== t);
+// Try image sources in sequence and report when every source fails.
+const tryImageSources = (imageElement, sourceList, onFailure) => {
+  let sourceIndex = 0;
+  imageElement.referrerPolicy = 'no-referrer';
+  imageElement.onerror = () => {
+    if (++sourceIndex < sourceList.length) {
+      imageElement.src = sourceList[sourceIndex];
+    } else {
+      onFailure();
+    }
+  };
+  imageElement.src = sourceList[0];
 };
-if ($('[data-tab]')) { document.querySelectorAll('[data-tab]').forEach(b => b.onclick = () => scheda(b.dataset.tab)); scheda(/android/i.test(navigator.userAgent) ? 'android' : 'iphone'); }
-if (matchMedia('(display-mode: standalone)').matches || navigator.standalone) document.querySelectorAll('a[href="installa.html"]').forEach(a => a.remove());
-if ('serviceWorker' in navigator) navigator.serviceWorker.register(new URL('sw.js', ROOT), { updateViaCache: 'none' });
+
+// Load the home photo from Drive, then fall back to a local photo or placeholder.
+const loadHomePhoto = () => {
+  document.querySelectorAll('.foto[data-foto]').forEach(async photoElement => {
+    const photoBox = photoElement.parentElement;
+    const localPhotoUrls = [
+      'jpeg',
+      'jpg',
+      'png',
+      'webp',
+      'JPG',
+      'JPEG',
+      'svg',
+    ].map(extension =>
+      new URL(`foto/home/${photoElement.dataset.foto}.${extension}`, siteRoot).href,
+    );
+
+    let imageSources = localPhotoUrls;
+    if (driveConfiguration) {
+      try {
+        const homeFiles = await fetchDrivePhotos('home');
+        const matchingFile =
+          homeFiles.find(file =>
+            file.name
+              .toLowerCase()
+              .startsWith(photoElement.dataset.foto),
+          ) || homeFiles[0];
+
+        if (matchingFile) {
+          imageSources = [
+            ...buildDriveImageUrls(matchingFile, 1400),
+            ...localPhotoUrls,
+          ];
+        }
+      } catch (error) {
+        console.warn('[Drive]', error.message);
+      }
+    }
+
+    photoElement.onload = () => photoBox.classList.add('ok');
+    tryImageSources(photoElement, imageSources, () =>
+      photoBox.classList.add('ko'),
+    );
+  });
+};
+
+// Close the hamburger menu and update its accessibility state.
+const closeMenu = () => {
+  const burgerButton = selectElement('#burger');
+  const menuElement = selectElement('#menu');
+  menuElement.hidden = true;
+  burgerButton.setAttribute('aria-expanded', 'false');
+};
+
+// Set up hamburger menu opening, closing, and keyboard behavior.
+const setupHamburgerMenu = () => {
+  const burgerButton = selectElement('#burger');
+  const menuElement = selectElement('#menu');
+
+  if (!burgerButton || !menuElement) return;
+
+  burgerButton.onclick = event => {
+    event.stopPropagation();
+    const shouldOpen = menuElement.hidden;
+    menuElement.hidden = !shouldOpen;
+    burgerButton.setAttribute('aria-expanded', String(shouldOpen));
+  };
+
+  document.addEventListener('click', event => {
+    if (!menuElement.hidden && !menuElement.contains(event.target)) {
+      closeMenu();
+    }
+  });
+
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape') closeMenu();
+  });
+};
+
+// Load one gallery from Drive or from its local fallback images.
+const loadGallery = async galleryElement => {
+  const sectionName = galleryElement.dataset.galleria;
+  const maximumPhotos = (window.GALLERIE || {}).massimo || 12;
+  let driveLoaded = false;
+
+  if (driveConfiguration) {
+    galleryElement.classList.add('carica');
+    try {
+      const driveFiles = (await fetchDrivePhotos(sectionName)).slice(
+        0,
+        maximumPhotos,
+      );
+      driveLoaded = true;
+
+      const loadResults = await Promise.all(
+        driveFiles.map(
+          (driveFile, imageIndex) =>
+            new Promise(resolve => {
+              const imageElement = new Image();
+              imageElement.alt = I18N.t('gallery.work', {
+                number: imageIndex + 1,
+              });
+              imageElement.decoding = 'async';
+              imageElement.onload = () => resolve(true);
+
+              tryImageSources(
+                imageElement,
+                buildDriveImageUrls(driveFile, 1000),
+                () => {
+                  imageElement.remove();
+                  resolve(false);
+                },
+              );
+              galleryElement.append(imageElement);
+            }),
+        ),
+      );
+
+      if (!loadResults.some(Boolean) && driveFiles.length) {
+        console.warn(
+          '[Drive] No image preview was loaded successfully.',
+        );
+      }
+    } catch (error) {
+      console.warn('[Drive]', error.message);
+    }
+    galleryElement.classList.remove('carica');
+  }
+
+  if (!driveLoaded) {
+    for (let imageNumber = 1; imageNumber <= maximumPhotos; imageNumber++) {
+      const imageElement = new Image();
+      imageElement.alt = I18N.t('gallery.work', { number: imageNumber });
+      imageElement.loading = 'lazy';
+      imageElement.decoding = 'async';
+      imageElement.onerror = () => imageElement.remove();
+      imageElement.src = new URL(
+        `foto/${sectionName}/${imageNumber}.jpeg`,
+        siteRoot,
+      ).href;
+      galleryElement.append(imageElement);
+    }
+  }
+};
+
+// Set up the gallery loading routine for every gallery on the page.
+const setupGalleries = () => {
+  document
+    .querySelectorAll('[data-galleria]')
+    .forEach(galleryElement => loadGallery(galleryElement));
+};
+
+// Switch between Android and iPhone installation instructions.
+const setInstallTab = tabName => {
+  document.querySelectorAll('[data-tab]').forEach(button => {
+    button.setAttribute(
+      'aria-pressed',
+      String(button.dataset.tab === tabName),
+    );
+  });
+
+  document.querySelectorAll('[data-pane]').forEach(pane => {
+    pane.hidden = pane.dataset.pane !== tabName;
+  });
+};
+
+// Set up install tabs and remove install links when already running standalone.
+const setupInstallExperience = () => {
+  if (selectElement('[data-tab]')) {
+    document.querySelectorAll('[data-tab]').forEach(button => {
+      button.onclick = () => setInstallTab(button.dataset.tab);
+    });
+
+    setInstallTab(
+      /android/i.test(navigator.userAgent) ? 'android' : 'iphone',
+    );
+  }
+
+  if (
+    matchMedia('(display-mode: standalone)').matches ||
+    navigator.standalone
+  ) {
+    document
+      .querySelectorAll('a[href="installa.html"]')
+      .forEach(link => link.remove());
+  }
+};
+
+// Register the install prompt and expose the one-tap install button.
+const setupInstallPrompt = () => {
+  let installPromptEvent = null;
+  const isMobileDevice =
+    /android|iphone|ipad|ipod|mobile/i.test(navigator.userAgent);
+  const oneTapButton = selectElement('#one-tap');
+
+  addEventListener('beforeinstallprompt', event => {
+    event.preventDefault();
+    installPromptEvent = event;
+    if (oneTapButton && isMobileDevice) oneTapButton.hidden = false;
+  });
+
+  if (oneTapButton) {
+    oneTapButton.onclick = async () => {
+      if (!installPromptEvent) return;
+      installPromptEvent.prompt();
+      await installPromptEvent.userChoice;
+      oneTapButton.hidden = true;
+    };
+  }
+};
+
+// Register the service worker with cache revalidation disabled.
+const registerServiceWorker = () => {
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register(new URL('sw.js', siteRoot), {
+      updateViaCache: 'none',
+    });
+  }
+};
+
+// Initialize all shared site behavior.
+const initializeSite = () => {
+  configureContactLinks();
+  loadHomePhoto();
+  setupHamburgerMenu();
+  setupGalleries();
+  setupInstallPrompt();
+  setupInstallExperience();
+  registerServiceWorker();
+};
+
+initializeSite();

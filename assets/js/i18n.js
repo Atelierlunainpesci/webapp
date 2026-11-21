@@ -286,7 +286,9 @@ const translations = {
 const browserLanguage = (navigator.language || (navigator.languages && navigator.languages[0]) || 'it').toLowerCase();
 const locale = browserLanguage.startsWith('it') ? 'it' : 'en';
 const messages = translations[locale];
-const t = (key, values = {}) => {
+
+// Translate a key and replace its named placeholder values.
+const translate = (key, values = {}) => {
   let message = messages[key];
   if (message === undefined) {
     console.warn(`[i18n] Missing ${locale} translation: ${key}`);
@@ -299,18 +301,24 @@ const t = (key, values = {}) => {
 };
 
 document.documentElement.lang = locale;
+
+// Apply translated text to elements with the i18n text attribute.
 document.querySelectorAll('[data-i18n]').forEach(element => {
   const key = element.dataset.i18n;
-  element.textContent = t(key);
+  element.textContent = translate(key);
 });
+
+// Apply translated HTML to elements with the i18n-html attribute.
 document.querySelectorAll('[data-i18n-html]').forEach(element => {
   const key = element.dataset.i18nHtml;
-  element.innerHTML = t(key);
+  element.innerHTML = translate(key);
 });
+
+// Apply translated values to attributes declared by i18n-attr.
 document.querySelectorAll('[data-i18n-attr]').forEach(element => {
   element.dataset.i18nAttr.split(',').forEach(pair => {
     const [attribute, key] = pair.split(':');
-    element.setAttribute(attribute, t(key));
+    element.setAttribute(attribute, translate(key));
   });
 });
 const ogLocale = document.querySelector('meta[property="og:locale"]');
@@ -318,8 +326,8 @@ if (ogLocale) ogLocale.content = locale === 'it' ? 'it_IT' : 'en_US';
 const structuredData = document.querySelector('script[type="application/ld+json"]');
 if (structuredData) {
   const data = JSON.parse(structuredData.textContent);
-  data.name = t('common.brandName');
-  data.description = t('schema.description');
+  data.name = translate('common.brandName');
+  data.description = translate('schema.description');
   structuredData.textContent = JSON.stringify(data);
 }
 const manifest = document.querySelector('link[rel="manifest"]');
@@ -328,4 +336,4 @@ if (manifest && locale === 'en') {
   manifestUrl.pathname = manifestUrl.pathname.replace(/manifest\.webmanifest$/, 'manifest.en.webmanifest');
   manifest.href = manifestUrl.href;
 }
-window.I18N = { locale, t };
+window.I18N = { locale, t: translate };

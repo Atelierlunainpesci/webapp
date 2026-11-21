@@ -1,3 +1,4 @@
+// Apply the preferred color theme and preserve local theme overrides.
 (() => {
   const isLocal = location.protocol === 'file:' ||
     ['localhost', '127.0.0.1', '::1'].includes(location.hostname);
