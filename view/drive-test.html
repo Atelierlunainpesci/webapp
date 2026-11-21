@@ -15,6 +15,11 @@
             --bg: #AF7C30;
             --ink: #2A1815;
             --paper: #FFF9F0;
+            --accent: #79253E;
+            --button-ink: #fffaf3;
+            --ochre-soft: #F5E8D0;
+            --ochre: #AF7C30;
+            --shadow-color: 54, 34, 22;
             --line: #7C5F43;
             --ok: #657546;
             --error: #79253E
@@ -25,6 +30,11 @@
             --bg: #75551F;
             --ink: #F4E8D8;
             --paper: #80602A;
+            --accent: #DCA077;
+            --button-ink: #2A1815;
+            --ochre-soft: #66503A;
+            --ochre: #E0B45C;
+            --shadow-color: 25, 15, 12;
             --line: #9B8069;
             --ok: #B5C58F;
             --error: #DCA077
@@ -37,6 +47,44 @@
             padding: 20px;
             background: var(--bg);
             color: var(--ink)
+        }
+
+        body.has-floating-actions {
+            padding-bottom: calc(170px + env(safe-area-inset-bottom))
+        }
+
+        .floating-azioni {
+            position: fixed;
+            left: 12px;
+            right: 12px;
+            bottom: calc(12px + env(safe-area-inset-bottom));
+            z-index: 18;
+            max-width: 620px;
+            margin: 0 auto;
+            padding: 8px;
+            display: flex;
+            gap: 10px;
+            background: var(--paper);
+            border-radius: 24px;
+            box-shadow: 0 8px 24px rgba(var(--shadow-color), .3)
+        }
+
+        .floating-azioni a {
+            flex: 1;
+            min-width: 0;
+            padding: 14px 12px;
+            border-radius: 99px;
+            background: var(--accent);
+            color: var(--button-ink);
+            font-weight: 700;
+            text-align: center;
+            text-decoration: none
+        }
+
+        .floating-azioni a:first-child {
+            background: var(--ochre-soft);
+            color: var(--ink);
+            box-shadow: inset 0 0 0 1px var(--ochre)
         }
 
         h1 {
@@ -77,24 +125,17 @@
             vertical-align: middle
         }
 
-        .home-return {
-            display: inline-block;
-            margin-bottom: 16px;
-            padding: 10px 16px;
-            border-radius: 99px;
-            background: var(--paper);
-            color: var(--ink);
-            font-weight: 700;
-            text-decoration: none
-        }
     </style>
 </head>
 
-<body>
-    <a class="home-return" href="../index.html" data-i18n="common.backHome"></a>
+<body class="has-floating-actions">
     <h1 data-i18n="driveTest.title"></h1>
     <p data-i18n="driveTest.intro"></p>
     <ol id="log"></ol>
+    <div class="floating-azioni">
+        <a href="../index.html" data-i18n="common.home"></a>
+        <a href="contatti.html" data-i18n="home.contactCta"></a>
+    </div>
     <script src="../assets/js/i18n.js"></script>
     <script src="../assets/js/config.js"></script>
     <script>

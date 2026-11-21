@@ -7,8 +7,8 @@ Se Drive è configurato in `assets/js/config.js`, carica o sostituisci le immagi
 | Cartella Drive | Dove compaiono |
 |---|---|
 | `foto/home/` | Foto nella home |
-| `foto/commissioni/` | Portfolio e galleria Commissioni |
-| `foto/ritrattini/` | Portfolio e galleria Ritrattini a portar via |
+| `foto/commissioni/` | Portfolio e galleria In atelier |
+| `foto/ritrattini/` | Portfolio e galleria Dal vivo |
 | `foto/editoriali/` | Sezione Illustrazioni del portfolio |
 
 Non serve mantenere nomi o estensioni specifiche: le gallerie rilevano automaticamente i file immagine e li ordinano per nome (numeri compresi). La home preferisce una foto il cui nome inizia con `chi-sono`; se non c'è, usa la prima. Le gallerie mostrano fino a 12 immagini. Il sito rilegge Drive quando viene aperta la pagina; l'elenco resta in cache per al massimo 30 secondi.

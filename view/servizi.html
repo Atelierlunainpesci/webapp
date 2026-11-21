@@ -26,7 +26,7 @@
   <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 
-<body>
+<body class="has-floating-actions">
   <a class="skip" href="#main" data-i18n="common.skip"></a>
   <header>
     <a href="../index.html" class="brand" data-i18n-attr="aria-label:common.brandHome"><svg class="moon" viewBox="0 0 32 32"
@@ -42,7 +42,6 @@
       href="contatti.html" data-i18n="common.contact"></a><a href="installa.html" data-i18n="common.install"></a>
   </nav>
   <main id="main">
-    <a class="btn alt home-return" href="../index.html" data-i18n="common.backHome"></a>
     <h1 data-i18n="services.heading"></h1>
     <p class="lead" data-i18n="services.intro"></p>
     <div class="servizi">
@@ -53,35 +52,6 @@
         </summary>
         <div class="servizio-contenuto">
           <p class="lead" data-i18n="commissions.intro"></p>
-          <h3 data-i18n="commissions.prices"></h3>
-          <table class="prezzi">
-            <caption class="sr" data-i18n="commissions.priceCaption"></caption>
-            <thead>
-              <tr>
-                <th scope="col" data-i18n="commissions.format"></th>
-                <th scope="col" data-i18n="commissions.price"></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td data-i18n="commissions.portraitA5"></td>
-                <td data-i18n="commissions.priceFrom"></td>
-              </tr>
-              <tr>
-                <td data-i18n="commissions.portraitA4"></td>
-                <td data-i18n="commissions.priceFrom"></td>
-              </tr>
-              <tr>
-                <td data-i18n="commissions.portraitA3"></td>
-                <td data-i18n="commissions.priceFrom"></td>
-              </tr>
-              <tr>
-                <td data-i18n="commissions.customIllustration"></td>
-                <td data-i18n="commissions.priceFrom"></td>
-              </tr>
-            </tbody>
-          </table>
-          <p class="nota" data-i18n="commissions.priceNote"></p>
           <h3 data-i18n="common.gallery"></h3>
           <div class="galleria" data-galleria="commissioni"></div>
           <p class="azioni"><a class="btn" data-i18n-attr="data-wa:commissions.talkMessage"
@@ -94,12 +64,7 @@
           <p class="sottotitolo" data-i18n="portraits.subtitle"></p>
         </summary>
         <div class="servizio-contenuto">
-          <h3 data-i18n="portraits.eventType"></h3>
-          <ul class="eventi">
-            <li><strong data-i18n="portraits.wedding"></strong></li>
-            <li><strong data-i18n="portraits.birthday"></strong></li>
-            <li><strong data-i18n="portraits.privateEvent"></strong></li>
-          </ul>
+          <p class="lead" data-i18n="portraits.description"></p>
           <p class="azioni"><a class="btn" data-i18n-attr="data-wa:portraits.talkMessage"
               href="contatti.html" data-i18n="portraits.book"></a></p>
           <h3 data-i18n="common.gallery"></h3>
@@ -108,6 +73,10 @@
       </details>
     </div>
   </main>
+  <div class="azioni floating-azioni">
+    <a class="btn alt" href="../index.html" data-i18n="common.home"></a>
+    <a class="btn" href="contatti.html" data-i18n="home.contactCta"></a>
+  </div>
   <footer data-i18n="common.footer"></footer>
   <script src="../assets/js/i18n.js"></script>
   <script src="../assets/js/config.js"></script>

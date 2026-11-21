@@ -37,7 +37,7 @@
   </noscript>
 </head>
 
-<body>
+<body class="has-floating-actions">
   <a class="skip" href="#main" data-i18n="common.skip"></a>
   <header>
     <a href="index.html" class="brand"
@@ -52,7 +52,6 @@
       data-i18n="common.services"></a><a href="view/contatti.html" data-i18n="common.contact"></a><a href="view/installa.html"
       data-i18n="common.install"></a></nav>
   <main id="main">
-        <a class="btn alt home-return" href="index.html" data-i18n="common.backHome"></a>
     <!-- TESTO DI PROVA: sostituisci con la tua presentazione -->
     <section class="chi">
       <h1 data-i18n="home.heading"></h1>
@@ -85,8 +84,10 @@
         </section>
       </div>
     </details>
-    <p class="azioni"><a class="btn" href="view/servizi.html" data-i18n="home.servicesCta"></a><a
-        class="btn alt" href="view/contatti.html" data-i18n="home.contactCta"></a></p>
+    <div class="azioni floating-azioni">
+      <a class="btn" href="view/servizi.html" data-i18n="home.servicesCta"></a>
+      <a class="btn alt" href="view/contatti.html" data-i18n="home.contactCta"></a>
+    </div>
   </main>
   <footer data-i18n="common.footer"></footer>
   <script src="assets/js/i18n.js"></script>
