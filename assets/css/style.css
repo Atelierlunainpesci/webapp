@@ -2,10 +2,13 @@
   color-scheme: light;
   --bg: #F4F4F4;
   --ink: #2A1815;
-  --accent: #883D37; /* Rosso mattone / Borgogna */
+  --accent: #883D37;
+  /* Rosso mattone / Borgogna */
   --button-ink: #FFFFFF;
-  --ochre: #C5AF58; /* Oro / Ocra metallizzato */
-  --terracotta: #A66337; /* Terracotta / Rame caldo */
+  --ochre: #C5AF58;
+  /* Oro / Ocra metallizzato */
+  --terracotta: #A66337;
+  /* Terracotta / Rame caldo */
   --accent-soft: #F9EBEA;
   --ochre-soft: #FBF7E9;
   --paper: #FFFFFF;
@@ -19,21 +22,21 @@
 
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --bg: #221C1A;
-  --ink: #F4F4F4;
-  --accent: #B25852;
-  --button-ink: #FFFFFF;
-  --ochre: #D9C36C;
-  --terracotta: #C07949;
-  --accent-soft: #4A2B28;
-  --ochre-soft: #4D452B;
-  --paper: #2E2522;
-  --shadow-color: 0, 0, 0;
-  --glow-accent: rgba(178, 88, 82, .2);
-  --glow-ochre: rgba(217, 195, 108, .18);
-  --placeholder-1: #9B863B;
-  --placeholder-2: #865233;
-  --placeholder-3: #4A554A;
+  --bg: #332A26;
+  --ink: #FFF8EE;
+  --accent: #D17A70;
+  --button-ink: #291B18;
+  --ochre: #E6CF78;
+  --terracotta: #D68A59;
+  --accent-soft: #67403B;
+  --ochre-soft: #665A3B;
+  --paper: #453834;
+  --shadow-color: 10, 7, 5;
+  --glow-accent: rgba(209, 122, 112, .2);
+  --glow-ochre: rgba(230, 207, 120, .2);
+  --placeholder-1: #9D8648;
+  --placeholder-2: #A56843;
+  --placeholder-3: #64705B;
 }
 
 * {
@@ -272,6 +275,33 @@ h1 {
   margin-top: 32px
 }
 
+.portfolio-titolo {
+  margin-bottom: 0;
+  border-radius: 24px 24px 0 0
+}
+
+.portfolio-titolo summary {
+  cursor: default
+}
+
+.portfolio-titolo summary::after {
+  display: none
+}
+
+.portfolio-titolo summary h2 {
+  margin: 0
+}
+
+.portfolio-contenuto {
+  padding: 24px;
+  background: var(--paper);
+  border-radius: 0 0 24px 24px
+}
+
+.portfolio-contenuto>.lead {
+  margin-bottom: 0
+}
+
 .chi h1 {
   margin-bottom: 20px
 }
@@ -341,7 +371,7 @@ h1 {
   border-top: 8px solid var(--accent);
 }
 
-.servizio:nth-child(2) {
+.servizi>.servizio:nth-child(2) {
   border-top-color: var(--ochre)
 }
 
@@ -414,6 +444,36 @@ h1 {
 .social svg {
   color: var(--accent);
   flex: none
+}
+
+.social .social-instagram {
+  gap: 16px
+}
+
+.social-instagram img {
+  width: 68px;
+  height: 68px;
+  flex: none;
+  border: 3px solid var(--ochre);
+  border-radius: 50%;
+  object-fit: cover
+}
+
+.social-instagram span {
+  display: grid;
+  gap: 2px
+}
+
+.social-instagram small {
+  font-size: .85rem;
+  font-weight: 400;
+  opacity: .75
+}
+
+.social a.social-email {
+  background: var(--ochre-soft);
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1px var(--ochre)
 }
 
 footer {
@@ -530,7 +590,7 @@ footer {
   margin-top: 42px
 }
 
-.portfolio-sezione > p {
+.portfolio-sezione>p {
   margin: 0 0 16px
 }
 
