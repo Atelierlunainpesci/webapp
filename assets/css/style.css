@@ -24,7 +24,7 @@
   color-scheme: dark;
   --bg: #332A26;
   --ink: #FFF8EE;
-  --accent: #D17A70;
+  --accent: #F5A097;
   --button-ink: #291B18;
   --ochre: #E6CF78;
   --terracotta: #D68A59;
@@ -117,6 +117,8 @@ header {
   display: flex;
   align-items: center;
   gap: 8px;
+  min-height: 44px;
+  padding: 8px 0;
   font-weight: 700;
   font-size: 1.05rem;
   white-space: nowrap
@@ -187,7 +189,26 @@ header {
   border-radius: 12px
 }
 
+.menu button {
+  min-height: 48px;
+  min-width: 48px;
+  padding: 14px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 1.15rem;
+  font-weight: 700;
+  text-align: center;
+  cursor: pointer
+}
+
 .menu a:hover {
+  background: var(--bg)
+}
+
+.menu button:hover {
   background: var(--bg)
 }
 
@@ -276,20 +297,10 @@ h1 {
 }
 
 .portfolio-titolo {
-  margin-bottom: 0;
+  margin: 0;
+  padding: 24px 24px 0;
+  background: var(--paper);
   border-radius: 24px 24px 0 0
-}
-
-.portfolio-titolo summary {
-  cursor: default
-}
-
-.portfolio-titolo summary::after {
-  display: none
-}
-
-.portfolio-titolo summary h2 {
-  margin: 0
 }
 
 .portfolio-contenuto {
@@ -321,13 +332,19 @@ h1 {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0;
+  opacity: 1;
   transition: opacity .3s
 }
 
-.fotobox.ok img,
-.fotobox noscript img {
-  opacity: 1
+.photo-trigger {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: zoom-in
 }
 
 .fotobox::after {
@@ -376,6 +393,10 @@ h1 {
 }
 
 .servizio summary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 48px;
   cursor: pointer;
   list-style: none
 }
@@ -386,10 +407,16 @@ h1 {
 
 .servizio summary::after {
   content: '+';
-  float: right;
-  margin-left: 12px;
-  font-size: 1.5rem;
-  font-weight: 700
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 44px;
+  height: 44px;
+  margin-left: auto;
+  border-radius: 50%;
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1
 }
 
 .servizio[open] summary::after {
@@ -397,6 +424,7 @@ h1 {
 }
 
 .servizio h2 {
+  flex: 1;
   margin: 0 0 4px;
   font-size: 1.6rem;
   line-height: 1.15
@@ -560,6 +588,13 @@ footer {
     border-radius: 99px
   }
 
+  .menu button {
+    pointer-events: auto;
+    font-size: 1.35rem;
+    padding: 10px 16px;
+    border-radius: 99px
+  }
+
   .chi {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -594,7 +629,7 @@ footer {
   margin: 0 0 16px
 }
 
-.galleria {
+.gallery {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 0;
@@ -602,41 +637,102 @@ footer {
   overflow: hidden
 }
 
-.galleria img {
+.gallery img {
   display: block;
   width: 100%;
   aspect-ratio: 1;
   object-fit: cover
 }
 
-.galleria[data-caption] {
+.gallery[data-caption] {
   gap: 14px;
   border-radius: 0;
   overflow: visible
 }
 
-.galleria[data-caption] figure {
+.gallery[data-caption] figure {
   margin: 0;
   overflow: hidden;
   border-radius: 18px;
   background: var(--paper)
 }
 
-.galleria[data-caption] figcaption {
+.gallery-image-button {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: var(--paper);
+  cursor: zoom-in
+}
+
+.gallery-image-button:focus-visible {
+  position: relative;
+  z-index: 1;
+  outline: 3px solid var(--ink);
+  outline-offset: -3px
+}
+
+.gallery[data-caption] figcaption {
   padding: 10px 12px;
   font-size: .9rem;
   font-weight: 600
 }
 
-.galleria img:nth-child(3n+1) {
+.lightbox {
+  position: fixed;
+  width: min(94vw, 1100px);
+  max-width: none;
+  max-height: 94vh;
+  padding: 48px 20px 20px;
+  border: 0;
+  border-radius: 20px;
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: 0 12px 48px rgba(var(--shadow-color), .5)
+}
+
+.lightbox::backdrop {
+  background: rgba(15, 10, 8, .82)
+}
+
+.lightbox img {
+  display: block;
+  max-width: 100%;
+  max-height: calc(94vh - 110px);
+  margin: 0 auto;
+  object-fit: contain
+}
+
+.lightbox p {
+  margin: 12px 0 0;
+  text-align: center
+}
+
+.lightbox-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--button-ink);
+  font: inherit;
+  font-size: 1.6rem;
+  cursor: pointer
+}
+
+.gallery img:nth-child(3n+1) {
   background: var(--placeholder-1)
 }
 
-.galleria img:nth-child(3n+2) {
+.gallery img:nth-child(3n+2) {
   background: var(--placeholder-2)
 }
 
-.galleria img:nth-child(3n) {
+.gallery img:nth-child(3n) {
   background: var(--placeholder-3)
 }
 
@@ -658,7 +754,7 @@ footer {
 }
 
 @media (min-width:900px) {
-  .galleria {
+  .gallery {
     grid-template-columns: repeat(3, 1fr)
   }
 
@@ -668,13 +764,13 @@ footer {
 }
 
 /* DRIVE + PAGINA INSTALLA */
-.galleria.carica {
+.gallery.carica {
   position: relative;
   min-height: 45vh;
   background: rgba(var(--shadow-color), .08)
 }
 
-.galleria.carica::after {
+.gallery.carica::after {
   content: '';
   position: absolute;
   top: 50%;

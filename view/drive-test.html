@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html lang="it">
 
 <head>
     <meta charset="utf-8">
@@ -8,7 +8,7 @@
     <meta name="theme-color" content="#AF7C30" media="(prefers-color-scheme: light)">
     <meta name="theme-color" content="#75551F" media="(prefers-color-scheme: dark)">
     <script src="../assets/js/theme.js"></script>
-    <title data-i18n="driveTest.title"></title>
+    <title data-i18n="driveTest.title">Test collegamento Drive</title>
     <style>
         :root {
             color-scheme: light;
@@ -129,17 +129,18 @@
 </head>
 
 <body class="has-floating-actions">
-    <h1 data-i18n="driveTest.title"></h1>
-    <p data-i18n="driveTest.intro"></p>
+    <h1 data-i18n="driveTest.title">Test collegamento Drive</h1>
+    <p data-i18n="driveTest.intro">Pagina di controllo: non è collegata al sito. Ogni riga dice cosa funziona e cosa no.</p>
     <ol id="log"></ol>
     <div class="floating-azioni">
-        <a href="../index.html" data-i18n="common.home"></a>
-        <a href="contatti.html" data-i18n="home.contactCta"></a>
+        <a href="../index.html" data-i18n="common.home">Home</a>
+        <a href="contatti.html" data-i18n="home.contactCta">Contattami</a>
     </div>
+    <script src="../assets/js/drive-test-i18n.js"></script>
     <script src="../assets/js/i18n.js"></script>
     <script src="../assets/js/config.js"></script>
     <script>
-        const driveConfiguration = (window.SITO || {}).drive || {};
+        const driveConfiguration = (window.SITE_CONFIG || {}).drive || {};
 
         // Append a success or failure entry to the Drive diagnostic log.
         const appendLog = (success, title, details = '') => {
@@ -228,14 +229,14 @@
                 I18N.t('driveTest.keyPresent'),
                 driveConfiguration.apiKey.slice(0, 6) +
                     I18N.t('driveTest.folderValue', {
-                        folder: driveConfiguration.cartella,
+                        folder: driveConfiguration.folderId,
                     }),
             );
 
             let rootFiles;
             try {
                 rootFiles = await fetchDriveTestFiles(
-                    `'${driveConfiguration.cartella}' in parents and trashed=false`,
+                    `'${driveConfiguration.folderId}' in parents and trashed=false`,
                 );
                 appendLog(
                     true,

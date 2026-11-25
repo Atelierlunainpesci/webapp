@@ -1,10 +1,10 @@
 const selectElement = selector => document.querySelector(selector);
-const siteConfiguration = window.SITO || {};
+const siteConfiguration = window.SITE_CONFIG || {};
 const siteRoot = new URL('../../', document.currentScript.src);
 const driveConfiguration =
   siteConfiguration.drive &&
   siteConfiguration.drive.apiKey &&
-  siteConfiguration.drive.cartella
+  siteConfiguration.drive.folderId
     ? siteConfiguration.drive
     : null;
 
@@ -92,11 +92,16 @@ async function fetchDriveFiles(query, fields = 'files(id,name)') {
 // Normalize a folder name for reliable matching.
 const normalizeName = name => String(name).trim().toLowerCase();
 
-const galleryAliases = {
+const galleryDriveFolderNames = {
   home: ['home'],
-  commissioni: ['commissioni'],
-  ritrattini: ['ritrattini'],
-  editoriali: ['editoriali', 'illustrazioni'],
+  commissions: ['commissioni'],
+  portraits: ['ritrattini'],
+  editorials: ['editoriali', 'illustrazioni'],
+};
+const localGalleryFolderNames = {
+  commissions: 'commissioni',
+  portraits: 'ritrattini',
+  editorials: 'editoriali',
 };
 
 // Fetch all folders directly inside a parent folder.
@@ -130,15 +135,18 @@ async function fetchDrivePhotos(sectionName) {
     return cachedData.files;
   }
 
-  const subfolders = await fetchSubfolders(driveConfiguration.cartella);
+  const subfolders = await fetchSubfolders(driveConfiguration.folderId);
   const photoRootId =
-    findFolder(subfolders, ['foto']) || driveConfiguration.cartella;
+    findFolder(subfolders, ['foto']) || driveConfiguration.folderId;
   const sectionFolderId =
-    photoRootId === driveConfiguration.cartella
-      ? findFolder(subfolders, galleryAliases[sectionName] || [sectionName])
+    photoRootId === driveConfiguration.folderId
+      ? findFolder(
+          subfolders,
+          galleryDriveFolderNames[sectionName] || [sectionName],
+        )
       : findFolder(
           await fetchSubfolders(photoRootId),
-          galleryAliases[sectionName] || [sectionName],
+          galleryDriveFolderNames[sectionName] || [sectionName],
         );
 
   if (!sectionFolderId) {
@@ -196,8 +204,8 @@ const tryImageSources = (imageElement, sourceList, onFailure) => {
 
 // Load the home photo from Drive, then fall back to a local photo or placeholder.
 const loadHomePhoto = () => {
-  document.querySelectorAll('.foto[data-foto]').forEach(async photoElement => {
-    const photoBox = photoElement.parentElement;
+  document.querySelectorAll('.foto[data-photo]').forEach(async photoElement => {
+    const photoBox = photoElement.closest('.fotobox');
     const localPhotoUrls = [
       'jpeg',
       'jpg',
@@ -270,32 +278,58 @@ const setupHamburgerMenu = () => {
   document.addEventListener('keydown', event => {
     if (event.key === 'Escape') closeMenu();
   });
+
+  document.addEventListener('site-language-change', () => {
+    if (!menuElement.hidden) closeMenu();
+  });
 };
 
 // Load one gallery from Drive or from its local fallback images.
 const loadGallery = async galleryElement => {
-  const sectionName = galleryElement.dataset.galleria;
-  const maximumPhotos = (window.GALLERIE || {}).massimo || 12;
-  let driveLoaded = false;
+  const sectionName = galleryElement.dataset.gallery;
+  const localFolderName = localGalleryFolderNames[sectionName] || sectionName;
+  const maximumPhotos = 12;
   const captionKey = galleryElement.dataset.caption;
+  let localFallbackAdded = false;
 
   const createGalleryItem = imageNumber => {
-    if (!captionKey) {
-      const imageElement = new Image();
-      imageElement.alt = I18N.t('gallery.work', { number: imageNumber });
-      imageElement.decoding = 'async';
-      return { container: imageElement, image: imageElement };
-    }
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'gallery-image-button';
+    button.dataset.lightbox = '';
+    const imageElement = new Image();
+    const imageCaptionKey = captionKey || 'gallery.work';
+    const imageCaption = I18N.t(imageCaptionKey, { number: imageNumber });
+    imageElement.dataset.captionKey = imageCaptionKey;
+    imageElement.dataset.captionNumber = imageNumber;
+    imageElement.alt = imageCaption;
+    imageElement.decoding = 'async';
+    imageElement.loading = 'lazy';
+    button.setAttribute('aria-label', imageCaption);
+    button.append(imageElement);
+
+    if (!captionKey) return { container: button, image: imageElement };
 
     const figure = document.createElement('figure');
-    const imageElement = new Image();
-    const caption = I18N.t(captionKey, { number: imageNumber });
     const captionElement = document.createElement('figcaption');
-    imageElement.alt = caption;
-    imageElement.decoding = 'async';
-    captionElement.textContent = caption;
-    figure.append(imageElement, captionElement);
+    captionElement.textContent = imageCaption;
+    figure.append(button, captionElement);
     return { container: figure, image: imageElement };
+  };
+
+  const addLocalGallery = () => {
+    if (localFallbackAdded) return;
+    localFallbackAdded = true;
+    galleryElement.classList.remove('carica');
+    for (let imageNumber = 1; imageNumber <= maximumPhotos; imageNumber++) {
+      const { container, image: imageElement } = createGalleryItem(imageNumber);
+      imageElement.onerror = () => container.remove();
+      imageElement.src = new URL(
+        `foto/${localFolderName}/${imageNumber}.jpeg`,
+        siteRoot,
+      ).href;
+      galleryElement.append(container);
+    }
   };
 
   if (driveConfiguration) {
@@ -305,60 +339,91 @@ const loadGallery = async galleryElement => {
         0,
         maximumPhotos,
       );
-      driveLoaded = true;
+      if (driveFiles.length) {
+        let failedImages = 0;
+        driveFiles.forEach((driveFile, imageIndex) => {
+          const { container, image: imageElement } = createGalleryItem(
+            imageIndex + 1,
+          );
+          imageElement.onload = () => galleryElement.classList.remove('carica');
 
-      const loadResults = await Promise.all(
-        driveFiles.map(
-          (driveFile, imageIndex) =>
-            new Promise(resolve => {
-              const { container, image: imageElement } = createGalleryItem(
-                imageIndex + 1,
-              );
-              imageElement.onload = () => resolve(true);
-
-              tryImageSources(
-                imageElement,
-                buildDriveImageUrls(driveFile, 1000),
-                () => {
-                  container.remove();
-                  resolve(false);
-                },
-              );
-              galleryElement.append(container);
-            }),
-        ),
-      );
-
-      if (!loadResults.some(Boolean) && driveFiles.length) {
-        console.warn(
-          '[Drive] No image preview was loaded successfully.',
-        );
+          tryImageSources(
+            imageElement,
+            buildDriveImageUrls(driveFile, 600),
+            () => {
+              container.remove();
+              failedImages += 1;
+              if (failedImages === driveFiles.length) {
+                console.warn('[Drive] No image preview was loaded successfully.');
+                addLocalGallery();
+              }
+            },
+          );
+          galleryElement.append(container);
+        });
+        galleryElement.classList.remove('carica');
+      } else {
+        addLocalGallery();
       }
     } catch (error) {
       console.warn('[Drive]', error.message);
+      addLocalGallery();
     }
-    galleryElement.classList.remove('carica');
-  }
-
-  if (!driveLoaded) {
-    for (let imageNumber = 1; imageNumber <= maximumPhotos; imageNumber++) {
-      const { container, image: imageElement } = createGalleryItem(imageNumber);
-      imageElement.loading = 'lazy';
-      imageElement.onerror = () => container.remove();
-      imageElement.src = new URL(
-        `foto/${sectionName}/${imageNumber}.jpeg`,
-        siteRoot,
-      ).href;
-      galleryElement.append(container);
-    }
+  } else {
+    addLocalGallery();
   }
 };
 
 // Set up the gallery loading routine for every gallery on the page.
 const setupGalleries = () => {
   document
-    .querySelectorAll('[data-galleria]')
+    .querySelectorAll('[data-gallery]')
     .forEach(galleryElement => loadGallery(galleryElement));
+};
+
+// Open gallery images in a native, keyboard-accessible modal.
+const setupLightbox = () => {
+  const lightbox = selectElement('.lightbox');
+  if (!lightbox) return;
+
+  const lightboxImage = lightbox.querySelector('img');
+  const lightboxCaption = lightbox.querySelector('p');
+  lightbox.querySelector('.lightbox-close').addEventListener('click', () => {
+    lightbox.close();
+  });
+
+  lightbox.addEventListener('click', event => {
+    if (event.target === lightbox) lightbox.close();
+  });
+
+  document.addEventListener('click', event => {
+    const trigger = event.target.closest('[data-lightbox]');
+    if (!trigger) return;
+    const sourceImage = trigger.querySelector('img');
+    if (!sourceImage) return;
+
+    lightboxImage.src = sourceImage.currentSrc || sourceImage.src;
+    lightboxImage.alt = sourceImage.alt;
+    lightboxCaption.textContent =
+      sourceImage.closest('figure')?.querySelector('figcaption')?.textContent ||
+      sourceImage.alt;
+    lightbox.showModal();
+  });
+
+  document.addEventListener('site-language-change', () => {
+    document
+      .querySelectorAll('.gallery-image-button img[data-caption-key]')
+      .forEach(imageElement => {
+        const caption = I18N.t(imageElement.dataset.captionKey, {
+          number: imageElement.dataset.captionNumber,
+        });
+        imageElement.alt = caption;
+        imageElement.parentElement.setAttribute('aria-label', caption);
+        const captionElement =
+          imageElement.closest('figure')?.querySelector('figcaption');
+        if (captionElement) captionElement.textContent = caption;
+      });
+  });
 };
 
 // Switch between Android and iPhone installation instructions.
@@ -392,7 +457,7 @@ const setupInstallExperience = () => {
     navigator.standalone
   ) {
     document
-      .querySelectorAll('a[href="installa.html"]')
+      .querySelectorAll('[data-install-link]')
       .forEach(link => link.remove());
   }
 };
@@ -435,6 +500,7 @@ const initializeSite = () => {
   loadHomePhoto();
   setupHamburgerMenu();
   setupGalleries();
+  setupLightbox();
   setupInstallPrompt();
   setupInstallExperience();
   registerServiceWorker();
