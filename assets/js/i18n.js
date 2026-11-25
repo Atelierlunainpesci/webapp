@@ -7,9 +7,11 @@ const translations = {
     'common.menuButton': 'Menu',
     'common.mainMenu': 'Menu principale',
     'common.home': 'Home',
-    'common.backHome': 'Torna alla home',
     'common.services': 'Esplora idee',
     'common.contact': 'Contatti',
+    'common.switchLanguage': 'Passa all’inglese',
+    'common.photoPreview': 'Anteprima immagine',
+    'common.close': 'Chiudi',
     'common.instagram': 'Instagram',
     'common.whatsapp': 'WhatsApp',
     'common.iphone': 'iPhone',
@@ -20,7 +22,7 @@ const translations = {
     'page.home.title': 'Atelier Luna in Pesci · Chi sono',
     'page.home.description': 'Atelier Luna in Pesci: ritratti, illustrazioni e live sketching per eventi e matrimoni. Scopri chi sono.',
     'page.services.title': 'Esplora idee · Atelier Luna in Pesci',
-    'page.services.description': 'Opere realizzate in atelier e ritratti dal vivo: scopri idee e progetti di Atelier Luna in Pesci.',
+    'page.services.description': 'Opere realizzate in atelier e ritratti dal vivo: esplora le proposte di Atelier Luna in Pesci.',
     'page.contact.title': 'Contattami · Atelier Luna in Pesci',
     'page.contact.description': 'Contattami su Instagram, WhatsApp o via email: atelierlunainpesci@gmail.com.',
     'page.install.title': "Installa l'app · Atelier Luna in Pesci",
@@ -30,13 +32,13 @@ const translations = {
     'home.photoAlt': "Ritratto dell'artista che sorride mentre dipinge",
     'home.paragraph1': "Ciao, sono l'artista di Atelier Luna in Pesci. Dipingo ritratti, illustrazioni e piccoli mondi pieni di colore, tra acquerello e matita.",
     'home.paragraph2': 'Mi piace raccontare le persone attraverso i loro dettagli: un sorriso, uno sguardo, un gesto. Qui trovi i miei lavori e i modi per lavorare insieme.',
-    'home.servicesCta': 'Scopri le idee',
+    'home.servicesCta': 'Esplora idee',
     'home.contactCta': 'Contattami',
-    'services.heading': 'Idee',
+    'services.heading': 'Esplora idee',
     'services.intro': "Due modi per portare un po' d'arte nella tua vita.",
     'services.commissions.description': 'Opere create su misura per te: ritratti, illustrazioni e dipinti da regalare o da tenere.',
-    'commissions.heading': 'In atelier',
-    'commissions.intro': "Ogni commissione nasce da una conversazione: mi racconti per chi è, cosa vuoi esprimere e in che stile lo immagini. Ti propongo uno schizzo e poi realizzo l'opera. Tempi e consegna si definiscono insieme.",
+    'services.commissions.heading': 'In atelier',
+    'services.commissions.intro': "Ogni commissione nasce da una conversazione: mi racconti per chi è, cosa vuoi esprimere e in che stile lo immagini. Ti propongo uno schizzo e poi realizzo l'opera. Tempi e consegna si definiscono insieme.",
     'contact.heading': 'Contattami',
     'contact.intro': 'Scegli il canale che preferisci: ti rispondo appena posso.',
     'contact.instagramCta': 'Visita il profilo Instagram di Atelier Luna in Pesci',
@@ -67,44 +69,10 @@ const translations = {
     'portfolio.commissionCaption': 'Opera realizzata in atelier · esempio {number}',
     'portfolio.portraitCaption': 'Ritratto dal vivo · esempio {number}',
     'portfolio.illustrationCaption': 'Illustrazione · esempio {number}',
-    'portraits.heading': 'Dal vivo',
-    'portraits.subtitle': 'Live sketching per il tuo evento',
-    'portraits.description': 'Durante il tuo evento realizzo dal vivo ritratti personalizzati per gli ospiti, che potranno portare a casa un ricordo unico della giornata.',
+    'services.portraits.heading': 'Dal vivo',
+    'services.portraits.subtitle': 'Live sketching per il tuo evento',
+    'services.portraits.description': 'Durante il tuo evento realizzo dal vivo ritratti personalizzati per gli ospiti, che potranno portare a casa un ricordo unico della giornata.',
     'gallery.work': 'Opera {number}',
-    'driveTest.title': 'Test collegamento Drive',
-    'driveTest.intro': 'Pagina di controllo: non è collegata al sito. Ogni riga dice cosa funziona e cosa no.',
-    'driveTest.address': 'Indirizzo del sito',
-    'driveTest.noKey': 'Chiave API assente',
-    'driveTest.noKeyDetails': 'Incolla la chiave in assets/js/config.js, campo drive.apiKey. Senza chiave il sito usa le foto della cartella foto/.',
-    'driveTest.keyPresent': 'Chiave API presente',
-    'driveTest.folderValue': '… | cartella: {folder}',
-    'driveTest.thumbnailApi': "thumbnailLink dell'API",
-    'driveTest.googleusercontent': 'lh3.googleusercontent.com',
-    'driveTest.driveThumbnail': 'drive.google.com/thumbnail',
-    'driveTest.httpStatus': 'HTTP {status}',
-    'driveTest.folderReachable': 'Cartella Drive raggiungibile',
-    'driveTest.unknownFolder': '(vuota)',
-    'driveTest.noneFound': 'nessuno',
-    'driveTest.cannotRead': 'Impossibile leggere la cartella Drive',
-    'driveTest.folderFound': 'Trovata la cartella "foto"',
-    'driveTest.folderMissing': 'Cartella "foto" non trovata dentro la cartella condivisa',
-    'driveTest.subfoldersTip': 'Se le sottocartelle sono direttamente nella cartella condivisa va bene lo stesso.',
-    'driveTest.folderNotFound': 'Cartella "{name}" non trovata',
-    'driveTest.foldersFound': 'Nomi trovati: {names}',
-    'driveTest.usablePhotos': '"{name}": {count} immagini trovate (incluse le HEIC)',
-    'driveTest.unusablePhotos': '<br>Ignorati (non sono immagini): {files}',
-    'driveTest.noPhotos': 'Nessuna foto da provare a caricare',
-    'driveTest.loadingImage': 'Caricamento immagine ("{name}") tramite {method}',
-    'driveTest.inProgress': 'in corso…',
-    'driveTest.works': 'Funziona.',
-    'driveTest.imageFailed': 'Non carica: la foto non è pubblica o Google blocca il collegamento.',
-    'driveTest.unexpected': 'Errore inatteso',
-    'driveTest.unknownError': 'Errore sconosciuto: copia questo messaggio e mandalo.',
-    'driveTest.refererHelp': 'La chiave è limitata a un sito diverso da questo. Nelle restrizioni della chiave aggiungi: {origin}/* (aspetta qualche minuto dopo il salvataggio).',
-    'driveTest.invalidKeyHelp': 'La chiave non è valida: ricontrolla di averla copiata per intero in assets/js/config.js.',
-    'driveTest.apiDisabledHelp': 'Google Drive API non è abilitata nel progetto della chiave (API e servizi, Libreria, Google Drive API, Abilita).',
-    'driveTest.folderHelp': 'Cartella non trovata o non condivisa con "Chiunque abbia il link", oppure ID errato in assets/js/config.js.',
-    'driveTest.restrictedHelp': 'La chiave ha restrizioni API che escludono Google Drive API.',
     'errors.driveRequestFailed': 'Richiesta a Drive non riuscita ({status}): {message}',
     'errors.driveFolderNotFound': 'Cartella "{name}" non trovata in Drive'
   },
@@ -116,8 +84,10 @@ const translations = {
     'common.menuButton': 'Menu',
     'common.mainMenu': 'Main menu',
     'common.home': 'Home',
-    'common.backHome': 'Back to home',
-    'common.services': 'Ideas & projects',
+    'common.services': 'Explore ideas',
+    'common.switchLanguage': 'Switch language to Italian',
+    'common.photoPreview': 'Image preview',
+    'common.close': 'Close',
     'common.contact': 'Contact',
     'common.instagram': 'Instagram',
     'common.whatsapp': 'WhatsApp',
@@ -128,8 +98,8 @@ const translations = {
     'common.gallery': 'Gallery',
     'page.home.title': 'Atelier Luna in Pesci · About me',
     'page.home.description': 'Atelier Luna in Pesci: portraits, illustrations and live sketching for events and weddings. Find out more about me.',
-    'page.services.title': 'Ideas & projects · Atelier Luna in Pesci',
-    'page.services.description': 'Custom artwork and live portraits: explore ideas and projects by Atelier Luna in Pesci.',
+    'page.services.title': 'Explore ideas · Atelier Luna in Pesci',
+    'page.services.description': 'Custom artwork and live portraits by Atelier Luna in Pesci.',
     'page.contact.title': 'Contact · Atelier Luna in Pesci',
     'page.contact.description': 'Contact me on Instagram, WhatsApp or by email: atelierlunainpesci@gmail.com.',
     'page.install.title': 'Install the app · Atelier Luna in Pesci',
@@ -141,11 +111,11 @@ const translations = {
     'home.paragraph2': 'I love telling people’s stories through the details: a smile, a glance, a gesture. Here you can see my work and find ways to work together.',
     'home.servicesCta': 'Explore ideas',
     'home.contactCta': 'Contact me',
-    'services.heading': 'Ideas',
+    'services.heading': 'Explore ideas',
     'services.intro': 'Two ways to bring a little art into your life.',
     'services.commissions.description': 'Artwork made just for you: portraits, illustrations and paintings to give as gifts or keep.',
-    'commissions.heading': 'In the studio',
-    'commissions.intro': 'Every commission begins with a conversation: tell me who it is for, what you would like to express and how you picture the style. I will suggest a sketch and then create the artwork. We will agree on the timeline and delivery together.',
+    'services.commissions.heading': 'In the studio',
+    'services.commissions.intro': 'Every commission begins with a conversation: tell me who it is for, what you would like to express and how you picture the style. I will suggest a sketch and then create the artwork. We will agree on the timeline and delivery together.',
     'contact.heading': 'Get in touch',
     'contact.intro': 'Choose your preferred way to get in touch. I will reply as soon as I can.',
     'contact.instagramCta': 'Visit Atelier Luna in Pesci on Instagram',
@@ -176,56 +146,30 @@ const translations = {
     'portfolio.commissionCaption': 'Artwork made in the studio · example {number}',
     'portfolio.portraitCaption': 'Live portrait · example {number}',
     'portfolio.illustrationCaption': 'Illustration · example {number}',
-    'portraits.heading': 'Live',
-    'portraits.subtitle': 'Live sketching for your event',
-    'portraits.description': 'I draw custom portraits of your guests live during your event, giving them a unique keepsake to take home.',
+    'services.portraits.heading': 'Live',
+    'services.portraits.subtitle': 'Live sketching for your event',
+    'services.portraits.description': 'I draw custom portraits of your guests live during your event, giving them a unique keepsake to take home.',
     'gallery.work': 'Artwork {number}',
-    'driveTest.title': 'Drive connection test',
-    'driveTest.intro': 'Test page: it is not connected to the website. Each line shows what is working and what is not.',
-    'driveTest.address': 'Website address',
-    'driveTest.noKey': 'API key missing',
-    'driveTest.noKeyDetails': 'Add the key to the drive.apiKey field in assets/js/config.js. Without a key, the website uses images from the foto/ folder.',
-    'driveTest.keyPresent': 'API key found',
-    'driveTest.folderValue': '… | folder: {folder}',
-    'driveTest.thumbnailApi': 'API thumbnailLink',
-    'driveTest.googleusercontent': 'lh3.googleusercontent.com',
-    'driveTest.driveThumbnail': 'drive.google.com/thumbnail',
-    'driveTest.httpStatus': 'HTTP {status}',
-    'driveTest.folderReachable': 'Drive folder is reachable',
-    'driveTest.unknownFolder': '(empty)',
-    'driveTest.noneFound': 'none',
-    'driveTest.cannotRead': 'Unable to read the Drive folder',
-    'driveTest.folderFound': 'Found the "foto" folder',
-    'driveTest.folderMissing': 'The "foto" folder was not found inside the shared folder',
-    'driveTest.subfoldersTip': 'It is also fine if the subfolders are directly inside the shared folder.',
-    'driveTest.folderNotFound': 'Folder "{name}" not found',
-    'driveTest.foldersFound': 'Names found: {names}',
-    'driveTest.usablePhotos': '"{name}": {count} images found (including HEIC)',
-    'driveTest.unusablePhotos': '<br>Ignored (not images): {files}',
-    'driveTest.noPhotos': 'No images available to test',
-    'driveTest.loadingImage': 'Loading image ("{name}") via {method}',
-    'driveTest.inProgress': 'in progress…',
-    'driveTest.works': 'Working.',
-    'driveTest.imageFailed': 'Could not load: the image is not public or Google is blocking the request.',
-    'driveTest.unexpected': 'Unexpected error',
-    'driveTest.unknownError': 'Unknown error: copy this message and send it.',
-    'driveTest.refererHelp': 'The key is restricted to a different website. Add {origin}/* to the key restrictions (it may take a few minutes after saving).',
-    'driveTest.invalidKeyHelp': 'The key is invalid: check that you copied it in full to assets/js/config.js.',
-    'driveTest.apiDisabledHelp': 'The Google Drive API is not enabled for the key’s project (APIs & Services, Library, Google Drive API, Enable).',
-    'driveTest.folderHelp': 'The folder was not found or is not shared with "Anyone with the link", or its ID in assets/js/config.js is incorrect.',
-    'driveTest.restrictedHelp': 'The key’s API restrictions do not include the Google Drive API.',
     'errors.driveRequestFailed': 'Drive request failed ({status}): {message}',
     'errors.driveFolderNotFound': 'Drive folder "{name}" not found'
   }
 };
 
-const browserLanguage = (navigator.language || (navigator.languages && navigator.languages[0]) || 'it').toLowerCase();
-const locale = browserLanguage.startsWith('it') ? 'it' : 'en';
-const messages = translations[locale];
+let locale = 'it';
+try {
+  const savedLocale = localStorage.getItem('site-language');
+  if (savedLocale === 'it' || savedLocale === 'en') locale = savedLocale;
+} catch (error) {
+  console.warn('[i18n] Unable to read the saved language preference.', error);
+}
 
 // Translate a key and replace its named placeholder values.
 const translate = (key, values = {}) => {
-  let message = messages[key];
+  let message =
+    (window.DRIVE_TEST_TRANSLATIONS &&
+      window.DRIVE_TEST_TRANSLATIONS[locale] &&
+      window.DRIVE_TEST_TRANSLATIONS[locale][key]) ||
+    translations[locale][key];
   if (message === undefined) {
     console.warn(`[i18n] Missing ${locale} translation: ${key}`);
     return key;
@@ -236,40 +180,72 @@ const translate = (key, values = {}) => {
   return message;
 };
 
-document.documentElement.lang = locale;
+const applyTranslations = () => {
+  document.documentElement.lang = locale;
+  const languageButton = document.querySelector('#language-toggle');
+  if (languageButton) {
+    const languageLabel = translate('common.switchLanguage');
+    languageButton.textContent = locale === 'it' ? '🇬🇧' : '🇮🇹';
+    languageButton.setAttribute('aria-label', languageLabel);
+    languageButton.title = languageLabel;
+  }
 
-// Apply translated text to elements with the i18n text attribute.
-document.querySelectorAll('[data-i18n]').forEach(element => {
-  const key = element.dataset.i18n;
-  element.textContent = translate(key);
-});
-
-// Apply translated HTML to elements with the i18n-html attribute.
-document.querySelectorAll('[data-i18n-html]').forEach(element => {
-  const key = element.dataset.i18nHtml;
-  element.innerHTML = translate(key);
-});
-
-// Apply translated values to attributes declared by i18n-attr.
-document.querySelectorAll('[data-i18n-attr]').forEach(element => {
-  element.dataset.i18nAttr.split(',').forEach(pair => {
-    const [attribute, key] = pair.split(':');
-    element.setAttribute(attribute, translate(key));
+  document.querySelectorAll('[data-i18n]').forEach(element => {
+    element.textContent = translate(element.dataset.i18n);
   });
-});
-const ogLocale = document.querySelector('meta[property="og:locale"]');
-if (ogLocale) ogLocale.content = locale === 'it' ? 'it_IT' : 'en_US';
-const structuredData = document.querySelector('script[type="application/ld+json"]');
-if (structuredData) {
-  const data = JSON.parse(structuredData.textContent);
-  data.name = translate('common.brandName');
-  data.description = translate('schema.description');
-  structuredData.textContent = JSON.stringify(data);
+
+  document.querySelectorAll('[data-i18n-html]').forEach(element => {
+    element.innerHTML = translate(element.dataset.i18nHtml);
+  });
+
+  document.querySelectorAll('[data-i18n-attr]').forEach(element => {
+    element.dataset.i18nAttr.split(',').forEach(pair => {
+      const [attribute, key] = pair.split(':');
+      element.setAttribute(attribute, translate(key));
+    });
+  });
+
+  const ogLocale = document.querySelector('meta[property="og:locale"]');
+  if (ogLocale) ogLocale.content = locale === 'it' ? 'it_IT' : 'en_US';
+
+  const structuredData = document.querySelector('script[type="application/ld+json"]');
+  if (structuredData) {
+    const data = JSON.parse(structuredData.textContent);
+    data.name = translate('common.brandName');
+    data.description = translate('schema.description');
+    structuredData.textContent = JSON.stringify(data);
+  }
+
+  const manifest = document.querySelector('link[rel="manifest"]');
+  if (manifest) {
+    const manifestUrl = new URL(manifest.href);
+    manifestUrl.pathname = manifestUrl.pathname.replace(
+      /manifest(?:\.en)?\.webmanifest$/,
+      locale === 'en' ? 'manifest.en.webmanifest' : 'manifest.webmanifest',
+    );
+    manifest.href = manifestUrl.href;
+  }
+};
+
+const languageButton = document.querySelector('#language-toggle');
+if (languageButton) {
+  languageButton.addEventListener('click', () => {
+    locale = locale === 'it' ? 'en' : 'it';
+    try {
+      localStorage.setItem('site-language', locale);
+    } catch (error) {
+      console.warn('[i18n] Unable to save the language preference.', error);
+    }
+    applyTranslations();
+    document.dispatchEvent(new CustomEvent('site-language-change'));
+  });
 }
-const manifest = document.querySelector('link[rel="manifest"]');
-if (manifest && locale === 'en') {
-  const manifestUrl = new URL(manifest.href);
-  manifestUrl.pathname = manifestUrl.pathname.replace(/manifest\.webmanifest$/, 'manifest.en.webmanifest');
-  manifest.href = manifestUrl.href;
-}
-window.I18N = { locale, t: translate };
+
+window.I18N = {
+  get locale() {
+    return locale;
+  },
+  t: translate,
+};
+
+applyTranslations();

@@ -1,11 +1,12 @@
 <!doctype html>
-<html>
+<html lang="it">
 
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <title data-i18n="page.install.title"></title>
-  <meta name="description" data-i18n-attr="content:page.install.description">
+  <title data-i18n="page.install.title">Installa l'app · Atelier Luna in Pesci</title>
+  <meta name="description" content="Come aggiungere Atelier Luna in Pesci alla schermata home del telefono (iPhone e Android) e aprirlo come un'app." data-i18n-attr="content:page.install.description">
+  <link rel="canonical" href="https://atelierlunainpesci.github.io/webapp/view/installa.html">
   <meta name="theme-color" content="#AF7C30" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#75551F" media="(prefers-color-scheme: dark)">
   <script src="../assets/js/theme.js"></script>
@@ -13,12 +14,15 @@
   <link rel="apple-touch-icon" href="../assets/icons/apple-touch-icon.png">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" data-i18n-attr="content:common.appTitle">
+  <meta name="apple-mobile-web-app-title" content="Luna in Pesci" data-i18n-attr="content:common.appTitle">
   <meta property="og:type" content="website">
-  <meta property="og:locale">
-  <meta property="og:site_name" data-i18n-attr="content:common.brandName">
-  <meta property="og:title" data-i18n-attr="content:page.install.title">
-  <meta property="og:description" data-i18n-attr="content:page.install.description">
+  <meta property="og:url" content="https://atelierlunainpesci.github.io/webapp/view/installa.html">
+  <meta property="og:locale" content="it_IT">
+  <meta property="og:site_name" content="Atelier Luna in Pesci" data-i18n-attr="content:common.brandName">
+  <meta property="og:title" content="Installa l'app · Atelier Luna in Pesci" data-i18n-attr="content:page.install.title">
+  <meta property="og:description" content="Come aggiungere Atelier Luna in Pesci alla schermata home del telefono (iPhone e Android) e aprirlo come un'app." data-i18n-attr="content:page.install.description">
+  <meta property="og:image" content="https://atelierlunainpesci.github.io/webapp/foto/home/chi-sono.jpeg">
+  <meta property="og:image:alt" content="Ritratto dell'artista di Atelier Luna in Pesci">
   <link rel="icon" href="../assets/icons/favicon.svg" type="image/svg+xml">
   <link
     href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&family=Fraunces:wght@500;700&display=swap"
@@ -27,44 +31,46 @@
 </head>
 
 <body class="has-floating-actions">
-  <a class="skip" href="#main" data-i18n="common.skip"></a>
+  <a class="skip" href="#main" data-i18n="common.skip">Vai al contenuto</a>
   <header>
-    <a href="../index.html" class="brand" data-i18n-attr="aria-label:common.brandHome"><svg class="moon" viewBox="0 0 32 32"
+    <a href="../index.html" class="brand" aria-label="Atelier Luna in Pesci, home" data-i18n-attr="aria-label:common.brandHome"><svg class="moon" viewBox="0 0 32 32"
         aria-hidden="true">
         <path d="M20 3a13 13 0 1 0 9 22A11 11 0 0 1 20 3z" fill="currentColor" />
-      </svg><span data-i18n="common.brandName"></span></a>
-    <button id="burger" type="button" data-i18n-attr="aria-label:common.menuButton" aria-expanded="false"
+      </svg><span data-i18n="common.brandName">Atelier Luna in Pesci</span></a>
+    <button id="burger" type="button" aria-label="Menu" data-i18n-attr="aria-label:common.menuButton" aria-expanded="false"
       aria-controls="menu"><span></span><span></span><span></span></button>
   </header>
-  <nav id="menu" class="menu" hidden data-i18n-attr="aria-label:common.mainMenu"><a href="../index.html" data-i18n="common.home"></a><a
-      href="servizi.html" data-i18n="common.services"></a><a
-      href="contatti.html" data-i18n="common.contact"></a><a href="installa.html" aria-current="page" data-i18n="common.install"></a></nav>
+  <nav id="menu" class="menu" hidden aria-label="Menu principale" data-i18n-attr="aria-label:common.mainMenu"><a href="../index.html" data-i18n="common.home">Home</a><a
+      href="explore-ideas.html" data-i18n="common.services">Esplora idee</a><a
+      href="contatti.html" data-i18n="common.contact">Contatti</a><a href="installa.html" aria-current="page" data-install-link
+      data-i18n="common.install">Installa l'app</a><button id="language-toggle" type="button"
+      aria-label="Passa all’inglese" title="Passa all’inglese">🇬🇧</button></nav>
   <main id="main">
-    <h1 data-i18n="install.heading"></h1>
-    <p class="lead" data-i18n="install.intro"></p>
-    <div class="tabs"><button type="button" data-tab="iphone" aria-pressed="true" data-i18n="common.iphone"></button><button type="button"
-        data-tab="android" aria-pressed="false" data-i18n="common.android"></button></div>
+    <h1 data-i18n="install.heading">Installa l'app</h1>
+    <p class="lead" data-i18n="install.intro">Aggiungi Atelier Luna in Pesci alla schermata home: si apre a schermo intero, come un'app.</p>
+    <div class="tabs"><button type="button" data-tab="iphone" aria-pressed="true" data-i18n="common.iphone">iPhone</button><button type="button"
+        data-tab="android" aria-pressed="false" data-i18n="common.android">Android</button></div>
     <ol class="passi" data-pane="iphone">
-      <li><span data-i18n-html="install.iphone.step1"></span>
+      <li><span data-i18n-html="install.iphone.step1">Apri il sito in <b>Safari</b>. Se sei in Instagram o WhatsApp, scegli prima «Apri in Safari».</span>
       </li>
-      <li><span data-i18n-html="install.iphone.step2"></span></li>
-      <li><span data-i18n-html="install.iphone.step3"></span></li>
-      <li><span data-i18n-html="install.iphone.step4"></span></li>
+      <li><span data-i18n-html="install.iphone.step2">Tocca <b>Condividi</b> nella barra in basso (se non la vedi, tocca ⋯).</span></li>
+      <li><span data-i18n-html="install.iphone.step3">Scorri e tocca <b>«Aggiungi alla schermata Home»</b>.</span></li>
+      <li><span data-i18n-html="install.iphone.step4">Tocca <b>Aggiungi</b> in alto a destra. Da ora apri l'atelier dall'icona.</span></li>
     </ol>
     <ol class="passi" data-pane="android" hidden>
-      <li><span data-i18n-html="install.android.step1"></span></li>
-      <li><span data-i18n-html="install.android.step2"></span></li>
-      <li><span data-i18n-html="install.android.step3"></span></li>
-      <li><span data-i18n-html="install.android.step4"></span></li>
+      <li><span data-i18n-html="install.android.step1">Apri il sito in <b>Chrome</b>.</span></li>
+      <li><span data-i18n-html="install.android.step2">Tocca il menu <b>⋮</b> in alto a destra.</span></li>
+      <li><span data-i18n-html="install.android.step3">Tocca <b>«Installa app»</b> o <b>«Aggiungi a schermata Home»</b>.</span></li>
+      <li><span data-i18n-html="install.android.step4">Conferma. Da ora apri l'atelier dall'icona.</span></li>
     </ol>
-    <p><button id="one-tap" class="btn" type="button" hidden data-i18n="install.oneTap"></button></p>
-    <p class="nota" data-i18n="install.note"></p>
+    <p><button id="one-tap" class="btn" type="button" hidden data-i18n="install.oneTap">Installa con un tap</button></p>
+    <p class="nota" data-i18n="install.note">Dal computer non serve: apri il sito dal telefono per aggiungerlo alla home.</p>
   </main>
   <div class="azioni floating-azioni">
-    <a class="btn alt" href="../index.html" data-i18n="common.home"></a>
-    <a class="btn" href="contatti.html" data-i18n="home.contactCta"></a>
+    <a class="btn alt" href="../index.html" data-i18n="common.home">Home</a>
+    <a class="btn" href="contatti.html" data-i18n="home.contactCta">Contattami</a>
   </div>
-  <footer data-i18n="common.footer"></footer>
+  <footer data-i18n="common.footer">© 2026 Atelier Luna in Pesci</footer>
   <script src="../assets/js/i18n.js"></script>
   <script src="../assets/js/config.js"></script>
   <script src="../assets/js/site.js"></script>

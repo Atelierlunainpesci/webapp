@@ -1,8 +1,9 @@
 # Atelier Luna in Pesci
 
 ## Cosa modificare
-- `assets/js/config.js`: link Instagram, numero WhatsApp (con prefisso, senza +) ed email.
-- Testi e traduzioni: `assets/js/i18n.js`. Le pagine usano l'italiano se la lingua preferita del browser inizia con `it`; per tutte le altre lingue usano l'inglese. Per aggiungere un'etichetta, crea la stessa chiave nei dizionari `it` e `en` e applicala in HTML con `data-i18n` (oppure `data-i18n-attr` per gli attributi e `data-i18n-html` per i passaggi con formattazione).
+- `assets/js/config.js`: link Instagram, numero WhatsApp (con prefisso, senza +), email e impostazioni Drive (`drive.apiKey` e `drive.folderId`).
+- Testi e traduzioni: `assets/js/i18n.js`. L'italiano è il contenuto statico iniziale; il selettore nel menu permette di passare all'inglese e salva la preferenza nel browser. Per aggiungere un'etichetta, crea la stessa chiave nei dizionari `it` e `en`, usando il prefisso della pagina (`home.*`, `services.*`, `contact.*`, `install.*`) o `common.*` per i testi condivisi. Applica la chiave in HTML con `data-i18n`, `data-i18n-attr` o `data-i18n-html`.
+- Diagnostica Drive: le chiavi usate solo da `view/drive-test.html` sono in `assets/js/drive-test-i18n.js`, così non vengono caricate nelle altre pagine.
 - Didascalie delle opere: modifica le chiavi `portfolio.commissionCaption`, `portfolio.portraitCaption` e `portfolio.illustrationCaption` in entrambi i dizionari di `assets/js/i18n.js`.
 - Testi personalizzati: aggiorna le traduzioni corrispondenti in `assets/js/i18n.js`, comprese le versioni inglesi.
 - Tema: segue la preferenza del dispositivo. In locale puoi forzarlo aggiungendo `?theme=dark` oppure `?theme=white` (anche `?theme=light`) all'indirizzo; la scelta resta attiva navigando tra le pagine. Rimuovi il parametro per tornare alla preferenza del dispositivo. Il test non è attivo sul sito pubblicato.
@@ -14,10 +15,13 @@
 - `assets/css/`, `assets/js/`, `assets/icons/`, `assets/images/`: fogli di stile, script, icone e immagini di supporto.
 - `manifest.webmanifest` e `sw.js` restano nella radice per mantenere corretti ambito e registrazione della PWA.
 
+## Test
+Esegui i test mirati con `node --test tests\site.test.js`.
+
 ## Pubblicare
 1. Nuovo repository pubblico su GitHub, carica i file (non lo zip).
 2. Settings, Pages, Deploy from a branch, main, / (root).
-3. Apri `sitemap.xml` e `robots.txt` e sostituisci `https://TUOUTENTE.github.io/NOME-REPO/` con l'indirizzo vero del sito.
+3. `sitemap.xml` e `robots.txt` sono già configurati per `https://atelierlunainpesci.github.io/webapp/`.
 
 ## Google
 1. Registra il sito su search.google.com/search-console.
@@ -27,7 +31,7 @@
 ## Foto da Google Drive (facoltativo)
 1. Crea una cartella Drive condivisa con "Chiunque abbia il link", Visualizzatore. Dentro crea `foto/home`, `foto/commissioni`, `foto/ritrattini` e `foto/editoriali` (illustrazioni nel portfolio).
 2. console.cloud.google.com: nuovo progetto, Libreria, abilita "Google Drive API".
-3. Credenziali, Crea credenziali, Chiave API. Modificala: Restrizioni applicazione = Siti web, aggiungi `https://TUOUTENTE.github.io/*`; Restrizioni API = solo Google Drive API.
+3. Credenziali, Crea credenziali, Chiave API. Modificala: Restrizioni applicazione = Siti web, aggiungi `https://atelierlunainpesci.github.io/*`; Restrizioni API = solo Google Drive API.
 4. Incolla la chiave in `assets/js/config.js`, campo `drive.apiKey`.
 
 Dopo questa configurazione, chi gestisce le foto può caricarle, sostituirle o rinominarle direttamente nella sottocartella giusta di Drive: non serve modificare il codice né ripubblicare il sito. Il sito rilegge l'elenco quando si apre la pagina (cache massima 30 secondi); per le gallerie mostra fino a 12 immagini, in ordine alfabetico/numerico. La foto home preferisce un nome che inizi con `chi-sono`, altrimenti usa la prima immagine.
